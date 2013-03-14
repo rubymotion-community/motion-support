@@ -1,5 +1,5 @@
-describe "blank" do
-  describe "Object" do
+describe "Object" do
+  describe "blank?" do
     it "should be blank when responds to empty and is empty" do
       [].respond_to?(:empty?).should == true
       [].blank?.should == true
@@ -9,7 +9,9 @@ describe "blank" do
       "Teststring".respond_to?(:empty?).should == true
       "Teststring".blank?.should == false
     end
-    
+  end
+  
+  describe "present?" do
     it "should be present if not blank" do
       "Hello".present?.should == true
     end
@@ -19,7 +21,7 @@ describe "blank" do
     end
   end
   
-  describe "common objects" do
+  describe "common blank objects" do
     it "should be blank for empty array" do
       [].blank?.should == true
     end

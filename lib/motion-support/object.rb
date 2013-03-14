@@ -15,10 +15,3 @@ class Object
     !blank?
   end
 end
-
-class NilClass
-  # nil is always blank. See Object#blank?
-  def blank?
-    true
-  end
-end
