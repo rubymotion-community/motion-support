@@ -62,7 +62,8 @@ describe "module" do
     
     describe "local_constants" do
       it "should return all direct constants within the module as symbols" do
-        ModuleIntrospection.local_constants.should == [:Foo, :Baz]
+        ModuleIntrospection.local_constants.should.include :Foo
+        ModuleIntrospection.local_constants.should.include :Baz
       end
     end
   end
