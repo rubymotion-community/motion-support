@@ -6,7 +6,7 @@ To see what's there, look into the lib folder. There is documentation, also most
 
 # Differences to ActiveSupport
 
-* Module#mattr_accessor has no support for instance accessors yet, since they are really cumbersome to implement without eval.
+* Lots of stuff missing
 
 # Forking
 

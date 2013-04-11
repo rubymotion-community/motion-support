@@ -1,5 +1,7 @@
 class Module
   def mattr_reader(*syms)
+    receiver = self
+    options = syms.extract_options!
     syms.each do |sym|
       raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
@@ -11,15 +13,33 @@ class Module
           class_variable_get("@@#{sym}")
         end
       end
+
+      unless options[:instance_reader] == false || options[:instance_accessor] == false
+        class_exec do
+          define_method sym do
+            receiver.class_variable_get("@@#{sym}")
+          end
+        end
+      end
     end
   end
 
   def mattr_writer(*syms)
+    receiver = self
+    options = syms.extract_options!
     syms.each do |sym|
       raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         define_singleton_method "#{sym}=" do |obj|
           class_variable_set("@@#{sym}", obj)
+        end
+      end
+
+      unless options[:instance_writer] == false || options[:instance_accessor] == false
+        class_exec do
+          define_method "#{sym}=" do |obj|
+            receiver.class_variable_set("@@#{sym}", obj)
+          end
         end
       end
     end
