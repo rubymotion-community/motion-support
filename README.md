@@ -6,7 +6,19 @@ To see what's there, look into the lib folder. There is documentation, also most
 
 # Differences to ActiveSupport
 
-* Lots of stuff missing
+In general:
+
+* All I18n stuff was removed. Maybe it will be readded later.
+* No support for the TimeWithZone class
+* No support for the DateTime class
+* All deprecated methods have been removed
+
+Specifically:
+
+* Array#to_xml is missing
+* Array#to_sentence does not accept a :locale parameter
+* Time.current an alias for Time.now (iOS apps don't need advanced time zone support)
+* Date.current an alias for Date.today
 
 # Forking
 
