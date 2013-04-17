@@ -19,6 +19,7 @@ Specifically:
 * Array#to_sentence does not accept a :locale parameter
 * Time.current an alias for Time.now (iOS apps don't need advanced time zone support)
 * Date.current an alias for Date.today
+* Date#to_time does not accept a timezone form (:local, :utc)
 
 # Forking
 

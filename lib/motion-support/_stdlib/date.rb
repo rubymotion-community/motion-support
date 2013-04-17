@@ -23,7 +23,7 @@ class Date
     new
   end
   
-  def inspect
+  def to_s
     "#{year}-#{month}-#{day}"
   end
   
@@ -61,7 +61,7 @@ class Date
     return self >> -months
   end
   
-  [:year, :month, :day, :wday, :<, :<=, :>, :>=, :"<=>"].each do |method|
+  [:year, :month, :day, :wday, :<, :<=, :>, :>=, :"<=>", :strftime].each do |method|
     define_method method do |*args|
       @value.send(method, *args)
     end
