@@ -7,3 +7,4 @@ resources/*.storyboardc
 .bundle
 Gemfile.lock
 pkg/*
+.DS_Store
