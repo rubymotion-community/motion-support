@@ -51,20 +51,6 @@ describe "string" do
     end
   end
 
-  describe "blank?" do
-    it "an empty string should be blank" do
-      ''.should.be.blank
-    end
-
-    it "a string containing only whitespace should be blank" do
-      '  '.should.be.blank
-    end
-
-    it "a string with content is not blank" do
-      'abc'.should.not.be.blank
-    end
-  end
-
   describe "camelize" do
     it 'a dashed string should convert to CamelCase' do
       'my-class'.camelize.should == 'MyClass'

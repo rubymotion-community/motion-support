@@ -15,10 +15,6 @@ class String
     self.length < 1
   end
 
-  def blank?
-    self.strip.empty?
-  end
-
   def pluralize
     Inflector.inflections.pluralize self
   end
