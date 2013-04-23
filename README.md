@@ -1,8 +1,8 @@
 # MotionSupport
 
-This is a very small library that sits loosely on top of BubbleWrap to extend the core RubyMotion classes, i.e. no user interface classes. It is somewhat inspired by ActiveSupport, but right now, not a lot is implemented.
+This is a port of the parts of ActiveSupport that make sense for RubyMotion.
 
-To see what's there, look into the lib folder. There is documentation, also most everything is tested.
+To see what's there, generate the documentation with the `rdoc` command from the repository root, or look into the lib folder. Almost everything is tested.
 
 # Differences to ActiveSupport
 
@@ -28,6 +28,9 @@ Specifically:
 * String multibyte methods are missing
 * String#html_safe and ERB extensions are not needed in RubyMotion
 
+# Acknowledgements
+
+ActiveSupport was originally written as part of Ruby on Rails by David Heinemeier Hansson. Over the years, countless contributors made many additions. They made this library possible.
 
 # Forking
 
