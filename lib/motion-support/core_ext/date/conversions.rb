@@ -4,11 +4,10 @@ class Date
     :long         => '%B %e, %Y',
     :db           => '%Y-%m-%d',
     :number       => '%Y%m%d',
-    # TODO: reenable this when inflector is ported
-    # :long_ordinal => lambda { |date|
-    #   day_format = MotionSupport::Inflector.ordinalize(date.day)
-    #   date.strftime("%B #{day_format}, %Y") # => "April 25th, 2007"
-    # },
+    :long_ordinal => lambda { |date|
+      day_format = MotionSupport::Inflector.ordinalize(date.day)
+      date.strftime("%B #{day_format}, %Y") # => "April 25th, 2007"
+    },
     :rfc822       => '%e %b %Y'
   }
 
