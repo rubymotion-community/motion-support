@@ -23,6 +23,11 @@ Specifically:
 * Object#in? is missing. It is incompatible with Bacon, it will break specs.
 * String#parameterize is missing because it needs to transliterate the string, which is dependent on the locale
 * String#constantize is very slow. Cache the result if you use it.
+* String#to_time, #to_date, #to_datetime are missing because they depend on Date#_parse
+* String inquiry methods are missing
+* String multibyte methods are missing
+* String#html_safe and ERB extensions are not needed in RubyMotion
+
 
 # Forking
 
