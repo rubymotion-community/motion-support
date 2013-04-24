@@ -8,6 +8,7 @@ class Time
   end
   
   def ==(other)
+    other &&
     year == other.year &&
     month == other.month &&
     day == other.day &&
