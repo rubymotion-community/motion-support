@@ -5,7 +5,6 @@ class InflectorViewController < Formotion::FormController
     @form.on_submit do |form|
       submit(form)
     end
-    $form = @form
     self
   end
   
