@@ -137,27 +137,33 @@ describe "Inflector" do
     end
   end
   
-  InflectorTestCases::Irregularities.each do |irregularity|
-    singular, plural = *irregularity
-    MotionSupport::Inflector.inflections do |inflect|
-      it "should support the irregularity between #{singular} and #{plural}" do
-        inflect.irregular(singular, plural)
-        MotionSupport::Inflector.singularize(plural).should == singular
-        MotionSupport::Inflector.pluralize(singular).should == plural
+  describe "irregularities" do
+    InflectorTestCases::Irregularities.each do |irregularity|
+      singular, plural = *irregularity
+      MotionSupport::Inflector.inflections do |inflect|
+        it "should singularize #{plural} as #{singular}" do
+          inflect.irregular(singular, plural)
+          MotionSupport::Inflector.singularize(plural).should == singular
+        end
+        
+        it "should pluralize #{singular} as #{plural}" do
+          inflect.irregular(singular, plural)
+          MotionSupport::Inflector.pluralize(singular).should == plural
+        end
       end
-    end
 
-    MotionSupport::Inflector.inflections do |inflect|
-      it "should return same string when pluralizing irregular plural #{plural}" do
-        inflect.irregular(singular, plural)
-        MotionSupport::Inflector.pluralize(plural).should == plural
+      MotionSupport::Inflector.inflections do |inflect|
+        it "should return same string when pluralizing irregular plural #{plural}" do
+          inflect.irregular(singular, plural)
+          MotionSupport::Inflector.pluralize(plural).should == plural
+        end
       end
-    end
 
-    MotionSupport::Inflector.inflections do |inflect|
-      it "should return same string when singularizing irregular singular #{singular}" do
-        inflect.irregular(singular, plural)
-        MotionSupport::Inflector.singularize(singular).should == singular
+      MotionSupport::Inflector.inflections do |inflect|
+        it "should return same string when singularizing irregular singular #{singular}" do
+          inflect.irregular(singular, plural)
+          MotionSupport::Inflector.singularize(singular).should == singular
+        end
       end
     end
   end
@@ -170,7 +176,7 @@ describe "Inflector" do
   end
   
   describe "acronym" do
-    it "should respect acronyms" do
+    before do
       MotionSupport::Inflector.inflections do |inflect|
         inflect.acronym("API")
         inflect.acronym("HTML")
@@ -181,61 +187,97 @@ describe "Inflector" do
         inflect.acronym("RoR")
         inflect.acronym("SSL")
       end
+    end
 
-      #  camelize             underscore            humanize              titleize
-      [
-        ["API",               "api",                "API",                "API"],
-        ["APIController",     "api_controller",     "API controller",     "API Controller"],
-        ["Nokogiri::HTML",    "nokogiri/html",      "Nokogiri/HTML",      "Nokogiri/HTML"],
-        ["HTTPAPI",           "http_api",           "HTTP API",           "HTTP API"],
-        ["HTTP::Get",         "http/get",           "HTTP/get",           "HTTP/Get"],
-        ["SSLError",          "ssl_error",          "SSL error",          "SSL Error"],
-        ["RESTful",           "restful",            "RESTful",            "RESTful"],
-        ["RESTfulController", "restful_controller", "RESTful controller", "RESTful Controller"],
-        ["IHeartW3C",         "i_heart_w3c",        "I heart W3C",        "I Heart W3C"],
-        ["PhDRequired",       "phd_required",       "PhD required",       "PhD Required"],
-        ["IRoRU",             "i_ror_u",            "I RoR u",            "I RoR U"],
-        ["RESTfulHTTPAPI",    "restful_http_api",   "RESTful HTTP API",   "RESTful HTTP API"],
+    #  camelize             underscore            humanize              titleize
+    [
+      ["API",               "api",                "API",                "API"],
+      ["APIController",     "api_controller",     "API controller",     "API Controller"],
+      ["Nokogiri::HTML",    "nokogiri/html",      "Nokogiri/HTML",      "Nokogiri/HTML"],
+      ["HTTPAPI",           "http_api",           "HTTP API",           "HTTP API"],
+      ["HTTP::Get",         "http/get",           "HTTP/get",           "HTTP/Get"],
+      ["SSLError",          "ssl_error",          "SSL error",          "SSL Error"],
+      ["RESTful",           "restful",            "RESTful",            "RESTful"],
+      ["RESTfulController", "restful_controller", "RESTful controller", "RESTful Controller"],
+      ["IHeartW3C",         "i_heart_w3c",        "I heart W3C",        "I Heart W3C"],
+      ["PhDRequired",       "phd_required",       "PhD required",       "PhD Required"],
+      ["IRoRU",             "i_ror_u",            "I RoR u",            "I RoR U"],
+      ["RESTfulHTTPAPI",    "restful_http_api",   "RESTful HTTP API",   "RESTful HTTP API"],
 
-        # misdirection
-        ["Capistrano",        "capistrano",         "Capistrano",       "Capistrano"],
-        ["CapiController",    "capi_controller",    "Capi controller",  "Capi Controller"],
-        ["HttpsApis",         "https_apis",         "Https apis",       "Https Apis"],
-        ["Html5",             "html5",              "Html5",            "Html5"],
-        ["Restfully",         "restfully",          "Restfully",        "Restfully"],
-        ["RoRails",           "ro_rails",           "Ro rails",         "Ro Rails"]
-      ].each do |camel, under, human, title|
+      # misdirection
+      ["Capistrano",        "capistrano",         "Capistrano",       "Capistrano"],
+      ["CapiController",    "capi_controller",    "Capi controller",  "Capi Controller"],
+      ["HttpsApis",         "https_apis",         "Https apis",       "Https Apis"],
+      ["Html5",             "html5",              "Html5",            "Html5"],
+      ["Restfully",         "restfully",          "Restfully",        "Restfully"],
+      ["RoRails",           "ro_rails",           "Ro rails",         "Ro Rails"]
+    ].each do |camel, under, human, title|
+      it "should camelize #{under} as #{camel}" do
         MotionSupport::Inflector.camelize(under).should == camel
+      end
+      
+      it "should keep #{camel} camelized" do
         MotionSupport::Inflector.camelize(camel).should == camel
+      end
+      
+      it "should keep #{under} underscored" do
         MotionSupport::Inflector.underscore(under).should == under
+      end
+      
+      it "should underscore #{camel} as #{under}" do
         MotionSupport::Inflector.underscore(camel).should == under
+      end
+      
+      it "should titleize #{under} as #{title}" do
         MotionSupport::Inflector.titleize(under).should == title
+      end
+      
+      it "should titleize #{camel} as #{title}" do
         MotionSupport::Inflector.titleize(camel).should == title
+      end
+      
+      it "should humanize #{under} as #{human}" do
         MotionSupport::Inflector.humanize(under).should == human
       end
     end
 
-    it "should allow for overriding acronyms" do
-      MotionSupport::Inflector.inflections do |inflect|
-        inflect.acronym("API")
-        inflect.acronym("LegacyApi")
+    describe "override acronyms" do
+      before do
+        MotionSupport::Inflector.inflections do |inflect|
+          inflect.acronym("API")
+          inflect.acronym("LegacyApi")
+        end
       end
 
-      MotionSupport::Inflector.camelize("legacyapi").should == "LegacyApi"
-      MotionSupport::Inflector.camelize("legacy_api").should == "LegacyAPI"
-      MotionSupport::Inflector.camelize("some_legacyapi").should == "SomeLegacyApi"
-      MotionSupport::Inflector.camelize("nonlegacyapi").should == "Nonlegacyapi"
+      {
+        "legacyapi" => "LegacyApi",
+        "legacy_api" => "LegacyAPI",
+        "some_legacyapi" => "SomeLegacyApi",
+        "nonlegacyapi" => "Nonlegacyapi"
+      }.each do |from, to|
+        it "should camelize #{from} as #{to}" do
+          MotionSupport::Inflector.camelize(from).should == to
+        end
+      end
     end
 
-    it "should downcase first part when lower-case camelizing string that starts with an acronym" do
-      MotionSupport::Inflector.inflections do |inflect|
-        inflect.acronym("API")
-        inflect.acronym("HTML")
+    describe "lower-camelize with acronym parts" do
+      before do
+        MotionSupport::Inflector.inflections do |inflect|
+          inflect.acronym("API")
+          inflect.acronym("HTML")
+        end
       end
-
-      MotionSupport::Inflector.camelize("html_api", false).should == "htmlAPI"
-      MotionSupport::Inflector.camelize("htmlAPI", false).should == "htmlAPI"
-      MotionSupport::Inflector.camelize("HTMLAPI", false).should == "htmlAPI"
+      
+      {
+        "html_api" => "htmlAPI",
+        "htmlAPI" => "htmlAPI",
+        "HTMLAPI" => "htmlAPI"
+      }.each do |from, to|
+        it "should lower-camelize #{from} as #{to}" do
+          MotionSupport::Inflector.camelize(from, false).should == to
+        end
+      end
     end
 
     it "should underscore acronym sequence" do
@@ -250,22 +292,30 @@ describe "Inflector" do
   end
   
   describe "demodulize" do
-    it "should remove namespaces" do
-      MotionSupport::Inflector.demodulize("MyApplication::Billing::Account").should == "Account"
-      MotionSupport::Inflector.demodulize("Account").should == "Account"
-      MotionSupport::Inflector.demodulize("").should == ""
+    {
+      "MyApplication::Billing::Account" => "Account",
+      "Account" => "Account",
+      "" => ""
+    }.each do |from, to|
+      it "should transform #{from} to #{to}" do
+        MotionSupport::Inflector.demodulize(from).should == to
+      end
     end
   end
 
   describe "deconstantize" do
-    it "should remove last part of namespaced constant" do
-      MotionSupport::Inflector.deconstantize("MyApplication::Billing::Account").should == "MyApplication::Billing"
-      MotionSupport::Inflector.deconstantize("::MyApplication::Billing::Account").should == "::MyApplication::Billing"
-      MotionSupport::Inflector.deconstantize("MyApplication::Billing").should == "MyApplication"
-      MotionSupport::Inflector.deconstantize("::MyApplication::Billing").should == "::MyApplication"
-      MotionSupport::Inflector.deconstantize("Account").should == ""
-      MotionSupport::Inflector.deconstantize("::Account").should == ""
-      MotionSupport::Inflector.deconstantize("").should == ""
+    {
+      "MyApplication::Billing::Account" => "MyApplication::Billing",
+      "::MyApplication::Billing::Account" => "::MyApplication::Billing",
+      "MyApplication::Billing" => "MyApplication",
+      "::MyApplication::Billing" => "::MyApplication",
+      "Account" => "",
+      "::Account" => "",
+      "" => ""
+    }.each do |from, to|
+      it "should deconstantize #{from} as #{to}" do
+        MotionSupport::Inflector.deconstantize(from).should == to
+      end
     end
   end
   
