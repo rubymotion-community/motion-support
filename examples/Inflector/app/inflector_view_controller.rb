@@ -48,12 +48,10 @@ private
         title: "Inflections",
         rows: [{
           title: "Singular",
-          value: "",
           key: :singular,
           type: :static
         }, {
           title: "Plural",
-          value: "",
           key: :plural,
           type: :static
         }]
@@ -61,37 +59,30 @@ private
         title: "Transformations",
         rows: [{
           title: "Camelized",
-          value: "",
           key: :camelized,
           type: :static
         }, {
           title: "Lower-Camelized",
-          value: "",
           key: :lower_camelized,
           type: :static
         }, {
           title: "Underscored",
-          value: "",
           key: :underscored,
           type: :static
         }, {
           title: "Classified",
-          value: "",
           key: :classified,
           type: :static
         }, {
           title: "Dasherized",
-          value: "",
           key: :dasherized,
           type: :static
         }, {
           title: "Titleized",
-          value: "",
           key: :titleized,
           type: :static
         }, {
           title: "Humanized",
-          value: "",
           key: :humanized,
           type: :static
         }]
