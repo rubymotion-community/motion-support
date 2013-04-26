@@ -1,3 +1,14 @@
+class Formotion::Form
+  def row(key)
+    sections.each do |section|
+      section.rows.each do |row|
+        return row if row.key == key
+      end
+    end
+    nil
+  end
+end
+
 class InflectorViewController < Formotion::FormController
   def init
     initWithForm(build_form)
@@ -12,7 +23,18 @@ class InflectorViewController < Formotion::FormController
     data = form.render
     original = String.new(data[:word])
     
-    form.values = {
+    update_fields(original)
+    
+    form.row(:word).text_field.resignFirstResponder
+  end
+  
+  def set_word(word)
+    @form.values = { :word => word }
+    update_fields(word)
+  end
+  
+  def update_fields(original)
+    @form.values = {
       :singular => original.singularize,
       :plural => original.pluralize,
       :camelized => original.camelize,
@@ -23,8 +45,6 @@ class InflectorViewController < Formotion::FormController
       :titleized => original.titleize,
       :humanized => original.humanize
     }
-    
-    form.sections[0].rows[0].text_field.resignFirstResponder
   end
 
 private
@@ -38,6 +58,10 @@ private
           placeholder: "Enter a word",
           auto_correction: :no,
           auto_capitalization: :none
+        }, {
+          title: "Select",
+          type: :button,
+          key: :select
         }]
       }, {
         rows: [{
@@ -88,5 +112,9 @@ private
         }]
       }]
     })
+    @form.row(:select).on_tap do
+      self.navigationController.pushViewController(WordsViewController.alloc.initWithParent(self), animated:true)
+    end
+    @form
   end
 end
