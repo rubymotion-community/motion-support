@@ -55,6 +55,8 @@ class WordsViewController < UITableViewController
         free_bsd
         html_api
         html_tidy
+        ui_image
+        ui_table_view_controller
         xml_http_request
       }
     ]

@@ -61,5 +61,7 @@ module MotionSupport
     inflect.irregular('zombie', 'zombies')
 
     inflect.uncountable(%w(equipment information rice money species series fish sheep jeans police))
+
+    inflect.acronym('UI')
   end
 end

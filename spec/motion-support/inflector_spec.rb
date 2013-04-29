@@ -203,6 +203,7 @@ describe "Inflector" do
       ["PhDRequired",       "phd_required",       "PhD required",       "PhD Required"],
       ["IRoRU",             "i_ror_u",            "I RoR u",            "I RoR U"],
       ["RESTfulHTTPAPI",    "restful_http_api",   "RESTful HTTP API",   "RESTful HTTP API"],
+      ["UIImage",           "ui_image",           "UI image",           "UI Image"],
 
       # misdirection
       ["Capistrano",        "capistrano",         "Capistrano",       "Capistrano"],
