@@ -1,18 +1,4 @@
 describe "string" do
-  describe "empty?" do
-    it "an empty string is detected by empty?" do
-      ''.empty?.should.be.true
-    end
-
-    it "a non-empty string is false according to empty?" do
-      'something'.empty?.should.not.be.true
-    end
-
-    it "a blank string is false according to empty?" do
-      ' '.empty?.should.not.be.true
-    end
-  end
-
   describe "constantize" do
     module Ace
       module Base

@@ -4,7 +4,13 @@ require 'motion/project'
 require 'bundler'
 Bundler.require
 
-require '../../lib/motion-support'
+module Kernel
+  def motion_require(file)
+    Motion::Require.all([file])
+  end
+end
+
+require '../../lib/motion-support/inflector'
 
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.

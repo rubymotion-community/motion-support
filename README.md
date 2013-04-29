@@ -4,6 +4,161 @@ This is a port of the parts of ActiveSupport that make sense for RubyMotion.
 
 To see what's there, generate the documentation with the `rdoc` command from the repository root, or look into the lib folder. Almost everything is tested.
 
+# Usage
+
+Install with
+
+    gem install motion-support
+
+or add to your `Gemfile`
+
+    gem 'motion-support'
+
+# Partial loading
+
+It is also possible to only use parts of this library. To do so, change your `Gemfile` so that it reads:
+
+    gem 'motion-support', :require => false
+
+Then add a require statement as shown below to your `Rakefile`.
+
+## all
+
+    require 'motion-support'
+
+Loads everything.
+
+## inflector
+
+    require 'motion-support/inflector'
+
+Loads the `Inflector` module and extensions to the `String` class. See the "Inflector" app in the `examples/` folder for what the inflector can do.
+
+Example usage include:
+
+    "app_delegate".camelize       # => "AppDelegate"
+    "HomeController".constantize  # => HomeController
+    "thing".pluralize             # => "things"
+    "mice".singularize            # => "mouse"
+
+## core_ext
+
+    require 'motion-support/core_ext'
+
+Loads all the extensions to core classes.
+
+## core_ext/array
+
+    require 'motion-support/core_ext/array'
+
+Loads extensions to class `Array`. Example usage include
+
+    %w( a b c d ).from(2)               # => ["c", "d"]
+    ['one', 'two', 'three'].to_sentence # => "one, two, and three"
+    args.extract_options!               # extracts options hash from variant args array
+    [1, 2, 3, 4].in_groups_of(2)        # => [[1, 2], [3, 4]]
+
+## core_ext/class
+
+    require 'motion-support/core_ext/class'
+
+Loads extensions to class `Class`.
+
+    class Foo
+      cattr_accessor :bar
+      class_attribute :foo
+    end
+
+## core_ext/hash
+
+    require 'motion-support/core_ext/hash'
+
+Loads extensions to class `Hash`, including class `HashWithIndifferentAccess`.
+
+    { 'foo' => 'bar', 'baz' => 'bam' }.symbolize_keys # => { :foo => 'bar', :baz => 'bam' }
+    { 'foo' => 'bar', 'baz' => 'bam' }.except('foo')  # => { 'baz' => 'bam' }
+    { 'foo' => 'bar', 'baz' => 'bam' }.with_indifferent_access
+    # => #<HashWithIndifferentAccess>
+
+## core_ext/integer
+
+    require 'motion-support/core_ext/integer'
+
+Loads extensions to class `Integer`.
+
+    1.ordinalize # => "1st"
+    3.ordinalize # => "3rd"
+
+## core_ext/module
+
+    require 'motion-support/core_ext/module'
+
+Loads extensions to class `Module`.
+
+    module Mod
+      mattr_accessor :foo, :bar
+      attr_internal :baz
+      delegate :boo, :to => :foo
+      
+      remove_method :baz
+    end
+
+## core_ext/numeric
+
+    require 'motion-support/core_ext/numeric'
+
+Loads extensions to class `Numeric`.
+
+    10.kilobytes  # => 10240
+    2.megabytes   # => 2097152
+    3.days
+
+## core_ext/object
+
+    require 'motion-support/core_ext/object'
+
+Loads extensions to class `Object`.
+
+    nil.blank?                                      # => true
+    Object.new.blank?                               # => false
+    { "hello" => "world", "foo" => "bar" }.to_query # => "hello=world&foo=bar"
+    1.duplicable?                                   # => false
+    1.try(:to_s)                                    # => "1"
+    nil.try(:to_s)                                  # => nil
+
+## core_ext/range
+
+    require 'motion-support/core_ext/range'
+
+Loads extensions to class `Range`.
+
+    (1..5).overlaps(3..9) # => true
+    (1..5).include?(2..3) # => true
+
+## core_ext/string
+
+    require 'motion-support/core_ext/string'
+
+Loads extensions to class `String`.
+
+    "ruby_motion".camelize    # => "RubyMotion"
+    "User".pluralize          # => "Users"
+    "mice".singularize        # => "mouse"
+    "Foo::Bar".underscore     # => "foo/bar"
+    "AppDelegate".underscore  # => "app_delegate"
+    "UIView".constantize      # => UIView
+
+## core_ext/time
+
+    require 'motion-support/core_ext/time'
+
+Loads extensions to class `Time`.
+
+    1.week.ago
+    17.days.from_now
+    Date.yesterday
+    Time.beginning_of_week
+
 # Differences to ActiveSupport
 
 In general:
@@ -26,6 +181,7 @@ Specifically:
 * `Array#third` .. `Array#fourty_two` were removed
 * `Array#to_xml` is missing
 * `Array#to_sentence` does not accept a `:locale` parameter
+* `Class#subclasses` is missing. It depends on `ObjectSpace.each_object` which is missing in RubyMotion
 * `Hash#extractable_options?` is missing
 * `BigDecimal` conversions were removed
 * `Time.current` an alias for `Time.now`
@@ -57,6 +213,7 @@ Things to do / to decide:
 * Do we need `File#atomic_write` for thread-safe file writing?
 * Do we need `Kernel#class_eval` (it delegates to `class_eval` on this' singleton class)?
 * Do we need `Module#qualified_const_defined?`? What is that even for?
+* Do we need `Module#synchronize`?
 * Implement `Numeric` conversions, especially `NumberHelper`
 * Do we need `Object#with_options`?
 * Implement `String#to_time`, `String#to_date`. In the original ActiveSupport, they make use of the `Date#_parse` method (which seems like it's supposed to be private). Here, they should be implemented on top of Cocoa APIs

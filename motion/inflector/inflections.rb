@@ -1,3 +1,5 @@
+motion_require '../core_ext/array/prepend_and_append'
+
 module MotionSupport
   module Inflector
     extend self

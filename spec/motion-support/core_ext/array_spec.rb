@@ -1,9 +1,4 @@
 describe 'array' do
-  it 'determines when an array is empty' do
-    [1, 2, 3].should.not.be.empty
-    [].should.be.empty
-  end
-
   it 'finds hash values' do
     array_of_hashes = [
       {
