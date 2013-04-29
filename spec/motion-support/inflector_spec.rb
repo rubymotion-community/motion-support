@@ -490,9 +490,9 @@ describe "Inflector" do
     end
     
     %w(plurals singulars uncountables humans acronyms).each do |scope|
-      MotionSupport::Inflector.inflections do |inflect|
-        it "should clear inflections with #{scope}" do
-          with_dup do
+      it "should clear inflections with #{scope}" do
+        with_dup do
+          MotionSupport::Inflector.inflections do |inflect|
             # clear the inflections
             inflect.clear(scope)
             inflect.send(scope).should == []
