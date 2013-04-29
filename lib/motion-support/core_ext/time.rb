@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   '_stdlib/date',
   '_stdlib/time',

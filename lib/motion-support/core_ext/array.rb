@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/array',
   'core_ext/array/wrap',

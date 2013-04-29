@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   "inflector/inflections",
   "inflector/methods",

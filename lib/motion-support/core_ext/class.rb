@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/class/attribute',
   'core_ext/class/attribute_accessors',

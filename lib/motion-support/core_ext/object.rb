@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/object/acts_like',
   'core_ext/object/blank',

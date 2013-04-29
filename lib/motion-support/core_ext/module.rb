@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/module/aliasing',
   'core_ext/module/introspection',

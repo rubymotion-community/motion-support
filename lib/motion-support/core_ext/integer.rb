@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/integer/multiple',
   'core_ext/integer/inflections',

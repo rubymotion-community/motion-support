@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/ns_dictionary',
   'core_ext/hash/deep_merge',

@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/range/include_range',
   'core_ext/range/overlaps'

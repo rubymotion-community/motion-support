@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/numeric/bytes',
   'core_ext/numeric/time'

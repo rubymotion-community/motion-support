@@ -1,3 +1,5 @@
+require 'motion-require'
+
 files = [
   'core_ext/string/access',
   'core_ext/string/behavior',
