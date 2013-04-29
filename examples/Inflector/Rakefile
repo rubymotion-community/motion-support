@@ -4,12 +4,6 @@ require 'motion/project'
 require 'bundler'
 Bundler.require
 
-module Kernel
-  def motion_require(file)
-    Motion::Require.all([file])
-  end
-end
-
 require '../../lib/motion-support/inflector'
 
 Motion::Project::App.setup do |app|
