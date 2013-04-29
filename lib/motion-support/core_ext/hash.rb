@@ -1,5 +1,5 @@
 files = [
-  'core_ext/hash',
+  'core_ext/ns_dictionary',
   'core_ext/hash/deep_merge',
   'core_ext/hash/except',
   'core_ext/hash/indifferent_access',
