@@ -188,7 +188,6 @@ Specifically:
 * `Date.current` an alias for `Date.today`
 * `Date#to_time` does not accept a timezone form (`:local`, `:utc`)
 * `Date#xmlschema` is missing
-* `Object#in?` is missing. It is incompatible with Bacon, it will break specs.
 * `String#parameterize` is missing because it needs to transliterate the string, which is dependent on the locale
 * `String#constantize` is very slow. Cache the result if you use it.
 * `String#to_time`, `#to_date`, `#to_datetime` are missing because they depend on `Date#_parse`
