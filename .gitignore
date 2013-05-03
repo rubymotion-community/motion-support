@@ -10,3 +10,4 @@ pkg/*
 .DS_Store
 doc/*
 .dat*
+.yardoc
