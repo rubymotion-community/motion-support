@@ -14,6 +14,10 @@ or add to your `Gemfile`
 
     gem 'motion-support'
 
+# API docs
+
+[Are here](http://www.rubydoc.info/github/tkadauke/motion-support/master/frames).
+
 # Partial loading
 
 It is also possible to only use parts of this library. To do so, change your `Gemfile` so that it reads:
