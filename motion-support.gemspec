@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = ["thomas.kadauke@googlemail.com"]
   s.homepage    = "https://github.com/tkadauke/motion-support"
   s.summary     = "Commonly useful extensions to the standard library for RubyMotion"
-  s.description = "Commonly useful extensions to the standard library for RubyMotion. Inspired by ActiveSupport."
+  s.description = "Commonly useful extensions to the standard library for RubyMotion. Ported from ActiveSupport."
 
   s.files         = `git ls-files`.split($\)
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
