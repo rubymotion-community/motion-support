@@ -8,11 +8,15 @@ To see what's there, generate the documentation with the `rdoc` command from the
 
 Install with
 
-    gem install motion-support
+```
+gem install motion-support
+```
 
 or add to your `Gemfile`
 
-    gem 'motion-support'
+```ruby
+gem 'motion-support'
+```
 
 # API docs
 
@@ -22,146 +26,231 @@ or add to your `Gemfile`
 
 It is also possible to only use parts of this library. To do so, change your `Gemfile` so that it reads:
 
-    gem 'motion-support', :require => false
+```ruby
+gem 'motion-support', :require => false
+```
 
 Then add a require statement as shown below to your `Rakefile`.
 
 ## all
 
-    require 'motion-support'
+```ruby
+require 'motion-support'
+```
 
 Loads everything.
 
 ## inflector
 
-    require 'motion-support/inflector'
+```ruby
+require 'motion-support/inflector'
+```
 
 Loads the `Inflector` module and extensions to the `String` class. See the "Inflector" app in the `examples/` folder for what the inflector can do.
 
 Example usage include:
 
-    "app_delegate".camelize       # => "AppDelegate"
-    "HomeController".constantize  # => HomeController
-    "thing".pluralize             # => "things"
-    "mice".singularize            # => "mouse"
+```ruby
+"app_delegate".camelize
+=> "AppDelegate"
+"HomeController".constantize
+=> HomeController
+"thing".pluralize
+=> "things"
+"mice".singularize
+=> "mouse"
+```
 
 ## core_ext
 
-    require 'motion-support/core_ext'
+```ruby
+require 'motion-support/core_ext'
+```
 
 Loads all the extensions to core classes.
 
 ## core_ext/array
 
-    require 'motion-support/core_ext/array'
+```ruby
+require 'motion-support/core_ext/array'
+```
 
 Loads extensions to class `Array`. Example usage include
 
-    %w( a b c d ).from(2)               # => ["c", "d"]
-    ['one', 'two', 'three'].to_sentence # => "one, two, and three"
-    args.extract_options!               # extracts options hash from variant args array
-    [1, 2, 3, 4].in_groups_of(2)        # => [[1, 2], [3, 4]]
+```ruby
+%w( a b c d ).from(2)
+=> ["c", "d"]
+['one', 'two', 'three'].to_sentence
+=> "one, two, and three"
+[1, 2, 3, 4].in_groups_of(2)
+=> [[1, 2], [3, 4]]
+```
+
+Extract options hash from variant args array
+
+```ruby
+args = ['hello', 'world', { :foo => 'bar' }]
+args.extract_options!
+=> { :foo => 'bar' }
+```
 
 ## core_ext/class
 
-    require 'motion-support/core_ext/class'
+```ruby
+require 'motion-support/core_ext/class'
+```
 
 Loads extensions to class `Class`.
 
-    class Foo
-      cattr_accessor :bar
-      class_attribute :foo
-    end
+```ruby
+class Foo
+  cattr_accessor :bar
+  class_attribute :foo
+end
+```
 
 ## core_ext/hash
 
-    require 'motion-support/core_ext/hash'
+```ruby
+require 'motion-support/core_ext/hash'
+```
 
 Loads extensions to class `Hash`, including class `HashWithIndifferentAccess`.
 
-    { 'foo' => 'bar', 'baz' => 'bam' }.symbolize_keys # => { :foo => 'bar', :baz => 'bam' }
-    { 'foo' => 'bar', 'baz' => 'bam' }.except('foo')  # => { 'baz' => 'bam' }
-    { 'foo' => 'bar', 'baz' => 'bam' }.with_indifferent_access
-    # => #<HashWithIndifferentAccess>
+```ruby
+{ 'foo' => 'bar', 'baz' => 'bam' }.symbolize_keys
+=> { :foo => 'bar', :baz => 'bam' }
+{ 'foo' => 'bar', 'baz' => 'bam' }.except('foo')
+=> { 'baz' => 'bam' }
+{ 'foo' => 'bar', 'baz' => 'bam' }.with_indifferent_access
+=> #<HashWithIndifferentAccess>
+```
 
 ## core_ext/integer
 
-    require 'motion-support/core_ext/integer'
+```ruby
+require 'motion-support/core_ext/integer'
+```
 
 Loads extensions to class `Integer`.
 
-    1.ordinalize # => "1st"
-    3.ordinalize # => "3rd"
+```ruby
+1.ordinalize
+=> "1st"
+3.ordinalize
+=> "3rd"
+```
 
 ## core_ext/module
 
-    require 'motion-support/core_ext/module'
+```ruby
+require 'motion-support/core_ext/module'
+```
 
 Loads extensions to class `Module`.
 
-    module Mod
-      mattr_accessor :foo, :bar
-      attr_internal :baz
-      delegate :boo, :to => :foo
-      
-      remove_method :baz
-    end
+```ruby
+module Mod
+  mattr_accessor :foo, :bar
+  attr_internal :baz
+  delegate :boo, :to => :foo
+  
+  remove_method :baz
+end
+```
 
 ## core_ext/numeric
 
-    require 'motion-support/core_ext/numeric'
+```ruby
+require 'motion-support/core_ext/numeric'
+```
 
 Loads extensions to class `Numeric`.
 
-    10.kilobytes  # => 10240
-    2.megabytes   # => 2097152
-    3.days
+```ruby
+10.kilobytes
+=> 10240
+2.megabytes
+=> 2097152
+3.days
+=> 3
+```
 
 ## core_ext/object
 
-    require 'motion-support/core_ext/object'
+```ruby
+require 'motion-support/core_ext/object'
+```
 
 Loads extensions to class `Object`.
 
-    nil.blank?                                      # => true
-    Object.new.blank?                               # => false
-    { "hello" => "world", "foo" => "bar" }.to_query # => "hello=world&foo=bar"
-    1.duplicable?                                   # => false
-    1.try(:to_s)                                    # => "1"
-    nil.try(:to_s)                                  # => nil
+```ruby
+nil.blank?
+=> true
+Object.new.blank?
+=> false
+{ "hello" => "world", "foo" => "bar" }.to_query
+=> "hello=world&foo=bar"
+1.duplicable?
+=> false
+1.try(:to_s)
+=> "1"
+nil.try(:to_s)
+=> nil
+```
 
 ## core_ext/range
 
-    require 'motion-support/core_ext/range'
+```ruby
+require 'motion-support/core_ext/range'
+```
 
 Loads extensions to class `Range`.
 
-    (1..5).overlaps(3..9) # => true
-    (1..5).include?(2..3) # => true
+```ruby
+(1..5).overlaps(3..9)
+=> true
+(1..5).include?(2..3)
+=> true
+```
 
 ## core_ext/string
 
-    require 'motion-support/core_ext/string'
+```ruby
+require 'motion-support/core_ext/string'
+```
 
 Loads extensions to class `String`.
 
-    "ruby_motion".camelize    # => "RubyMotion"
-    "User".pluralize          # => "Users"
-    "mice".singularize        # => "mouse"
-    "Foo::Bar".underscore     # => "foo/bar"
-    "AppDelegate".underscore  # => "app_delegate"
-    "UIView".constantize      # => UIView
+```ruby
+"ruby_motion".camelize
+=> "RubyMotion"
+"User".pluralize
+=> "Users"
+"mice".singularize
+=> "mouse"
+"Foo::Bar".underscore
+=> "foo/bar"
+"AppDelegate".underscore
+=> "app_delegate"
+"UIView".constantize
+=> UIView
+```
 
 ## core_ext/time
 
-    require 'motion-support/core_ext/time'
+```ruby
+require 'motion-support/core_ext/time'
+```
 
 Loads extensions to class `Time`.
 
-    1.week.ago
-    17.days.from_now
-    Date.yesterday
-    Time.beginning_of_week
+```ruby
+1.week.ago
+17.days.from_now
+Date.yesterday
+Time.beginning_of_week
+```
 
 # Differences to ActiveSupport
 
