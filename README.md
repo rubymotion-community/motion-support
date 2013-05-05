@@ -237,6 +237,12 @@ Things to do / to decide:
 
 ActiveSupport was originally written as part of Ruby on Rails by David Heinemeier Hansson. Over the years, countless contributors made many additions. They made this library possible.
 
+# License
+
+MotionSupport is released under the MIT license:
+
+<http://www.opensource.org/licenses/MIT>
+
 # Forking
 
 Feel free to fork and submit pull requests!
