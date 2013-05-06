@@ -1,3 +1,5 @@
+motion_require 'core_ext/hash/keys'
+
 module MotionSupport
   # Implements a hash where keys <tt>:foo</tt> and <tt>"foo"</tt> are considered
   # to be the same.
