@@ -7,8 +7,8 @@ class NSString
   
   delegate :at, :blank?, :camelcase, :camelize, :classify, :constantize, :dasherize,
            :deconstantize, :demodulize, :exclude?, :first, :foreign_key, :from, :humanize,
-           :indent, :indent!, :last, :parameterize, :pluralize, :safe_constantize,
-           :singularize, :squish, :squish!, :strip_heredoc, :tableize, :titlecase,
-           :titleize, :to, :truncate, :underscore,
+           :indent, :indent!, :last, :pluralize, :safe_constantize, :singularize,
+           :squish, :squish!, :strip_heredoc, :tableize, :titlecase, :titleize, :to,
+           :truncate, :underscore,
            :to => :to_s
 end
