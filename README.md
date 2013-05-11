@@ -317,7 +317,6 @@ Things to do / to decide:
 * Port callbacks.rb
 * Port concern.rb
 * Do we need the `Configurable` module?
-* Do we need the `DescendantsTracker` module?
 * Do we need the `OrderedOptions` class?
 * Some extensions have to be made available for Cocoa classes (`NSArray`, `NSDictionary` etc.), since we want to effectively handle return values from Objective-C methods (they return Cocoa classes). The way to do this is to write a conversion method from Cocoa class to Ruby class and delegate the extension methods in the Cocoa class to the conversion method. See `motion/core_ext/ns_string.rb` for an example.
 * Go through documentation and remove or rewrite things not relevant to RubyMotion, especially examples mentioning Rails components
