@@ -318,7 +318,6 @@ Things to do / to decide:
 * Do we need multibyte string handling extensions? AFAIK, all strings in RubyMotion are UTF-8. Is that true?
 * Do we need `Struct#to_h`?
 * Implement extensions to class `Thread` if they make sense.
-* Port concern.rb
 * Do we need the `Configurable` module?
 * Do we need the `OrderedOptions` class?
 * Some extensions have to be made available for Cocoa classes (`NSArray`, `NSDictionary` etc.), since we want to effectively handle return values from Objective-C methods (they return Cocoa classes). The way to do this is to write a conversion method from Cocoa class to Ruby class and delegate the extension methods in the Cocoa class to the conversion method. See `motion/core_ext/ns_string.rb` for an example.
