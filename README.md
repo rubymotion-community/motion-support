@@ -268,6 +268,7 @@ In general:
 * All marshalling code was removed
 * All logging code was removed
 * All extensions to `Test::Unit` were removed
+* The `ActiveSupport` namespace is called `MotionSupport`
 
 Specifically:
 
@@ -292,6 +293,9 @@ Specifically:
 * The `rfc822` time format was removed, since it relies on time zone support.
 * Extensions to `LoadError` and `NameError` were removed
 * The `ThreadSafe` versions of `Hash` and `Array` are just aliases to the standard classes
+* In `MotionSupport::Callbacks` it is not possible to give a string containing Ruby code as a conditions via `:if`, since RubyMotion doesn't support `eval`.
+* In `MotionSupport::Callbacks`, if a proc is given as a condition to `:if`, the block must take the class instance as a parameter. `self` is not automatically set.
+* In `MotionSupport::Callbacks#define_callbacks`, the `:terminator` argument must take a block of the form `lambda { |result| }` where `result` is the intermediate result from the callback methods.
 
 Things to do / to decide:
 
@@ -314,7 +318,6 @@ Things to do / to decide:
 * Do we need multibyte string handling extensions? AFAIK, all strings in RubyMotion are UTF-8. Is that true?
 * Do we need `Struct#to_h`?
 * Implement extensions to class `Thread` if they make sense.
-* Port callbacks.rb
 * Port concern.rb
 * Do we need the `Configurable` module?
 * Do we need the `OrderedOptions` class?
