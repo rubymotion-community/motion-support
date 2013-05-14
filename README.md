@@ -40,6 +40,22 @@ require 'motion-support'
 
 Loads everything.
 
+## callbacks
+
+```ruby
+require 'motion-support/callbacks'
+```
+
+Loads the `MotionSupport::Callbacks` module. It allows you to easily add Rails-style callbacks to any class.
+
+## concern
+
+```ruby
+require 'motion-support/concern'
+```
+
+Loads the `MotionSupport::Concern` module. This simplifies separating classes into modules and managing module dependencies.
+
 ## inflector
 
 ```ruby
