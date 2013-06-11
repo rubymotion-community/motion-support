@@ -1,12 +1,22 @@
+module Kernel
+  def log(*args)
+    MotionSupport.logger.log(*args)
+  end
+  
+  def l(*args)
+    MotionSupport.logger.log(args.map { |a| a.inspect })
+  end
+end
+
 module MotionSupport
   class NullLogger
-    def log(string)
+    def log(*args)
     end
   end
 
   class StdoutLogger
-    def log(string)
-      puts string
+    def log(*args)
+      puts args
     end
   end
   
@@ -21,9 +31,17 @@ module MotionSupport
       @output_stream.open
     end
     
-    def log(string)
-      data = NSData.alloc.initWithData("#{string}\n".dataUsingEncoding(NSASCIIStringEncoding))
-      @output_stream.write(data.bytes, maxLength:data.length);
+    def log(*args)
+      args.each do |string|
+        data = NSData.alloc.initWithData("#{string}\n".dataUsingEncoding(NSASCIIStringEncoding))
+        @output_stream.write(data.bytes, maxLength:data.length)
+      end
     end
+  end
+  
+  mattr_writer :logger
+  
+  def self.logger
+    @logger ||= StdoutLogger.new
   end
 end
