@@ -312,6 +312,7 @@ Specifically:
 * In `MotionSupport::Callbacks` it is not possible to give a string containing Ruby code as a conditions via `:if`, since RubyMotion doesn't support `eval`.
 * In `MotionSupport::Callbacks`, if a proc is given as a condition to `:if`, the block must take the class instance as a parameter. `self` is not automatically set.
 * In `MotionSupport::Callbacks#define_callbacks`, the `:terminator` argument must take a block of the form `lambda { |result| }` where `result` is the intermediate result from the callback methods.
+* `NumberHelper` and numeric conversions only support phone numbers for now
 
 Things to do / to decide:
 
