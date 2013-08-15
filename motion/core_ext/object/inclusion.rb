@@ -1,7 +1,6 @@
 class Object
   # Returns true if this object is included in the argument(s). Argument must be
-  # any object which responds to +#include?+ or optionally, multiple arguments
-  # can be passed in. Usage:
+  # any object which responds to +#include?+. Usage:
   #
   #   characters = ['Konata', 'Kagami', 'Tsukasa']
   #   'Konata'.in?(characters) # => true
