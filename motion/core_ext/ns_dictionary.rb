@@ -7,5 +7,5 @@ class NSDictionary
     end
   end
   
-  delegate :symbolize_keys, :to => :to_hash
+  delegate :symbolize_keys, :with_indifferent_access, :nested_under_indifferent_access, :to => :to_hash
 end
