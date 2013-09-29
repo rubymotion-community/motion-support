@@ -1,6 +1,7 @@
 require 'motion-require'
 
 files = [
+  '_stdlib/cgi',
   'core_ext/object/acts_like',
   'core_ext/object/blank',
   'core_ext/object/deep_dup',
