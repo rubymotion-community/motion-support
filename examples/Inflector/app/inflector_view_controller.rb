@@ -1,14 +1,3 @@
-class Formotion::Form
-  def row(key)
-    sections.each do |section|
-      section.rows.each do |row|
-        return row if row.key == key
-      end
-    end
-    nil
-  end
-end
-
 class InflectorViewController < Formotion::FormController
   def init
     initWithForm(build_form)
