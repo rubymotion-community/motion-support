@@ -30,7 +30,7 @@ describe "Time" do
       end
       
       it "should convert to nsec format" do
-        @time.to_s(:nsec).should == "200502211744309N"
+        @time.to_s(:nsec).should == "20050221174430123451232"
         # Hmm. Looks like RubyMotion has an issue with nanosecs in string time formatting. It should actually be "20050221174430123456789"
       end
       
