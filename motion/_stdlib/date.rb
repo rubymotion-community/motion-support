@@ -74,4 +74,8 @@ class Date
   def to_time
     @value
   end
+
+  def succ
+    self + 1
+  end
 end
