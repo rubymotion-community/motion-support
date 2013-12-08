@@ -13,6 +13,8 @@ describe "Hash" do
       @nested_illegal_symbols = { [] => { [] => 3} }
       @upcase_strings = { 'A' => 1, 'B' => 2 }
       @nested_upcase_strings = { 'A' => { 'B' => { 'C' => 3 } } }
+      @nested_array_symbols = { :a => [ { :a => 1 }, { :b => 2 } ] }
+      @nested_array_strings = { 'a' => [ { 'a' => 1 }, { 'b' => 2 } ] }
     end
     
     it "should have all key methods defined on literal hash" do
@@ -120,6 +122,7 @@ describe "Hash" do
         @nested_symbols.deep_symbolize_keys.should == @nested_symbols
         @nested_strings.deep_symbolize_keys.should == @nested_symbols
         @nested_mixed.deep_symbolize_keys.should == @nested_symbols
+        @nested_array_strings.deep_symbolize_keys.should == @nested_array_symbols
       end
       
       it "should not mutate" do
@@ -159,6 +162,7 @@ describe "Hash" do
         @nested_symbols.deep_dup.deep_symbolize_keys!.should == @nested_symbols
         @nested_strings.deep_dup.deep_symbolize_keys!.should == @nested_symbols
         @nested_mixed.deep_dup.deep_symbolize_keys!.should == @nested_symbols
+        @nested_array_strings.deep_symbolize_keys!.should == @nested_array_symbols
       end
       
       it "should mutate" do
@@ -188,6 +192,7 @@ describe "Hash" do
         @nested_symbols.deep_stringify_keys.should == @nested_strings
         @nested_strings.deep_stringify_keys.should == @nested_strings
         @nested_mixed.deep_stringify_keys.should == @nested_strings
+        @nested_array_symbols.deep_stringify_keys.should == @nested_array_strings
       end
       
       it "should not mutate" do
@@ -217,6 +222,7 @@ describe "Hash" do
         @nested_symbols.deep_dup.deep_stringify_keys!.should == @nested_strings
         @nested_strings.deep_dup.deep_stringify_keys!.should == @nested_strings
         @nested_mixed.deep_dup.deep_stringify_keys!.should == @nested_strings
+        @nested_array_symbols.deep_stringify_keys!.should == @nested_array_strings
       end
       
       it "should mutate" do

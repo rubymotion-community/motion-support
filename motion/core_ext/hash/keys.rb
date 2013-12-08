@@ -82,7 +82,13 @@ class Hash
   def deep_transform_keys(&block)
     result = {}
     each do |key, value|
-      result[yield(key)] = value.is_a?(Hash) ? value.deep_transform_keys(&block) : value
+      result[yield(key)] = if value.is_a?(Hash)
+        value.deep_transform_keys(&block)
+      elsif value.is_a?(Array)
+        value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
+      else
+       value
+      end
     end
     result
   end
@@ -93,7 +99,13 @@ class Hash
   def deep_transform_keys!(&block)
     keys.each do |key|
       value = delete(key)
-      self[yield(key)] = value.is_a?(Hash) ? value.deep_transform_keys!(&block) : value
+      self[yield(key)] = if value.is_a?(Hash)
+        value.deep_transform_keys(&block)
+      elsif value.is_a?(Array)
+        value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
+      else
+       value
+      end
     end
     self
   end
