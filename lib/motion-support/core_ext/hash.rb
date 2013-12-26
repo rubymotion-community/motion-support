@@ -8,6 +8,7 @@ files = [
   'core_ext/hash/keys',
   'core_ext/hash/reverse_merge',
   'core_ext/hash/slice',
+  'core_ext/hash/deep_delete_if',
   'hash_with_indifferent_access',
   
   'core_ext/module/delegation'
