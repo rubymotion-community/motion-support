@@ -16,9 +16,27 @@ describe "Hash" do
       @nested_array_symbols = { :a => [ { :a => 1 }, { :b => 2 } ] }
       @nested_array_strings = { 'a' => [ { 'a' => 1 }, { 'b' => 2 } ] }
     end
-    
+
     it "should have all key methods defined on literal hash" do
       h = {}
+      h.should.respond_to :transform_keys
+      h.should.respond_to :transform_keys!
+      h.should.respond_to :deep_transform_keys
+      h.should.respond_to :deep_transform_keys!
+      h.should.respond_to :symbolize_keys
+      h.should.respond_to :symbolize_keys!
+      h.should.respond_to :deep_symbolize_keys
+      h.should.respond_to :deep_symbolize_keys!
+      h.should.respond_to :stringify_keys
+      h.should.respond_to :stringify_keys!
+      h.should.respond_to :deep_stringify_keys
+      h.should.respond_to :deep_stringify_keys!
+      h.should.respond_to :to_options
+      h.should.respond_to :to_options!
+    end
+
+    it "should have all key methods defined on NSDictionary" do
+      h = NSDictionary.alloc.init
       h.should.respond_to :transform_keys
       h.should.respond_to :transform_keys!
       h.should.respond_to :deep_transform_keys
