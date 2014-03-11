@@ -18,13 +18,49 @@ describe "NSDictionary" do
       @hash.values.should == ['bar']
     end
   end
-  
-  describe "symbolize_keys" do
-    it "should work for NSDictionary instances" do
-      dict = NSMutableDictionary.alloc.init
-      dict.setValue('bar', forKey:'foo')
-      dict.symbolize_keys.should == { :foo => 'bar' }
+
+  def describe_with_bang(method, &block)
+    bang_method = "#{method}!"
+
+    describe(method) do
+      it "should work for NSDictionary instances" do
+        block.call(method)
+      end
     end
+
+    describe(bang_method) do
+      it "should work for NSDictionary instances" do
+        block.call(bang_method)
+      end
+    end
+  end
+
+  describe_with_bang "symbolize_keys" do |method|
+    dict = NSMutableDictionary.alloc.init
+    dict.setValue('bar', forKey:'foo')
+    dict.send(method).should == { :foo => 'bar' }
+  end
+
+  describe_with_bang "deep_symbolize_keys" do |method|
+    dict = NSMutableDictionary.alloc.init
+    innerDict = NSMutableDictionary.alloc.init
+    innerDict.setValue('foobar', forKey: 'bar')
+    dict.setValue(innerDict, forKey:'foo')
+    dict.send(method).should == {foo: {bar: 'foobar'}}
+  end
+
+  describe_with_bang "stringify_keys" do |method|
+    dict = NSMutableDictionary.alloc.init
+    dict.setValue('bar', forKey: :foo)
+    dict.send(method).should == {'foo' => 'bar'}
+  end
+
+  describe_with_bang "deep_stringify_keys" do |method|
+    dict = NSMutableDictionary.alloc.init
+    innerDict = NSMutableDictionary.alloc.init
+    innerDict.setValue('foobar', forKey: :bar)
+    dict.setValue(innerDict, forKey: :foo)
+    dict.send(method).should == {'foo' => {'bar' => 'foobar'}}
   end
 
   describe "with_indifferent_access" do
