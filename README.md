@@ -20,7 +20,7 @@ gem 'motion-support'
 
 # API docs
 
-[Are here](http://www.rubydoc.info/github/tkadauke/motion-support/master/frames).
+[Are here](http://www.rubydoc.info/github/rubymotion/motion-support/master).
 
 # Partial loading
 
