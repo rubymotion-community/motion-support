@@ -1,8 +1,5 @@
-require 'motion-require'
+require 'motion_blender'
+MotionBlender.add __FILE__
 
-files = [
-  'core_ext/class/attribute',
-  'core_ext/class/attribute_accessors',
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
-
-Motion::Require.all(files)
+require_relative '../../../motion/core_ext/class/attribute'
+require_relative '../../../motion/core_ext/class/attribute_accessors'

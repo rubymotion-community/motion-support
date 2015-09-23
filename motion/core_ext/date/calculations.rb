@@ -1,4 +1,4 @@
-motion_require "../date_and_time/calculations"
+require_relative '../date_and_time/calculations'
 
 class Date
   include DateAndTime::Calculations

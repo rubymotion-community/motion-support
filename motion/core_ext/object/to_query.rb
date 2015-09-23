@@ -1,4 +1,4 @@
-motion_require 'to_param'
+require_relative 'to_param'
 
 class Object
   # Converts an object into a string suitable for use as a URL query string, using the given <tt>key</tt> as the

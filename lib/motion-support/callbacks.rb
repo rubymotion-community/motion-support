@@ -1,11 +1,8 @@
-require 'motion-require'
+require 'motion_blender'
+MotionBlender.add __FILE__
 
-files = [
-  "_stdlib/array",
-  "concern",
-  "descendants_tracker",
-  "callbacks",
-  "core_ext/kernel/singleton_class"
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../motion", "#{file}.rb")) }
-
-Motion::Require.all(files)
+require_relative '../../motion/_stdlib/array'
+require_relative '../../motion/concern'
+require_relative '../../motion/descendants_tracker'
+require_relative '../../motion/callbacks'
+require_relative '../../motion/core_ext/kernel/singleton_class'

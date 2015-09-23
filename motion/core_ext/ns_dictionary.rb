@@ -1,4 +1,4 @@
-motion_require "module/delegation"
+require_relative 'module/delegation'
 
 class NSDictionary
   def to_hash

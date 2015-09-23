@@ -1,4 +1,4 @@
-motion_require "../module/aliasing"
+require_relative '../module/aliasing'
 
 class Range
   # Extends the default Range#include? to support range comparisons.

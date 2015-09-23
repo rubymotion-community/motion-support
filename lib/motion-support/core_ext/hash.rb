@@ -1,17 +1,13 @@
-require 'motion-require'
+require 'motion_blender'
+MotionBlender.add __FILE__
 
-files = [
-  'core_ext/ns_dictionary',
-  'core_ext/hash/deep_merge',
-  'core_ext/hash/except',
-  'core_ext/hash/indifferent_access',
-  'core_ext/hash/keys',
-  'core_ext/hash/reverse_merge',
-  'core_ext/hash/slice',
-  'core_ext/hash/deep_delete_if',
-  'hash_with_indifferent_access',
-  
-  'core_ext/module/delegation'
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
-
-Motion::Require.all(files)
+require_relative '../../../motion/core_ext/ns_dictionary'
+require_relative '../../../motion/core_ext/hash/deep_merge'
+require_relative '../../../motion/core_ext/hash/except'
+require_relative '../../../motion/core_ext/hash/indifferent_access'
+require_relative '../../../motion/core_ext/hash/keys'
+require_relative '../../../motion/core_ext/hash/reverse_merge'
+require_relative '../../../motion/core_ext/hash/slice'
+require_relative '../../../motion/core_ext/hash/deep_delete_if'
+require_relative '../../../motion/hash_with_indifferent_access'
+require_relative '../../../motion/core_ext/module/delegation'

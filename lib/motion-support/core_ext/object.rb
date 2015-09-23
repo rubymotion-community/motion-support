@@ -1,15 +1,12 @@
-require 'motion-require'
+require 'motion_blender'
+MotionBlender.add __FILE__
 
-files = [
-  '_stdlib/cgi',
-  'core_ext/object/acts_like',
-  'core_ext/object/blank',
-  'core_ext/object/deep_dup',
-  'core_ext/object/duplicable',
-  'core_ext/object/try',
-  'core_ext/object/instance_variables',
-  'core_ext/object/to_param',
-  'core_ext/object/to_query',
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
-
-Motion::Require.all(files)
+require_relative '../../../motion/_stdlib/cgi'
+require_relative '../../../motion/core_ext/object/acts_like'
+require_relative '../../../motion/core_ext/object/blank'
+require_relative '../../../motion/core_ext/object/deep_dup'
+require_relative '../../../motion/core_ext/object/duplicable'
+require_relative '../../../motion/core_ext/object/try'
+require_relative '../../../motion/core_ext/object/instance_variables'
+require_relative '../../../motion/core_ext/object/to_param'
+require_relative '../../../motion/core_ext/object/to_query'

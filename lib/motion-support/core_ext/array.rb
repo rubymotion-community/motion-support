@@ -1,13 +1,10 @@
-require 'motion-require'
+require 'motion_blender'
+MotionBlender.add __FILE__
 
-files = [
-  'core_ext/array',
-  'core_ext/array/wrap',
-  'core_ext/array/access',
-  'core_ext/array/conversions',
-  'core_ext/array/extract_options',
-  'core_ext/array/grouping',
-  'core_ext/array/prepend_and_append'
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
-
-Motion::Require.all(files)
+require_relative '../../../motion/core_ext/array'
+require_relative '../../../motion/core_ext/array/wrap'
+require_relative '../../../motion/core_ext/array/access'
+require_relative '../../../motion/core_ext/array/conversions'
+require_relative '../../../motion/core_ext/array/extract_options'
+require_relative '../../../motion/core_ext/array/grouping'
+require_relative '../../../motion/core_ext/array/prepend_and_append'
