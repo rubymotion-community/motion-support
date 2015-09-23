@@ -1,7 +1,7 @@
 describe "duplicable?" do
   before do
-    @raise_dup = [nil, false, true, :symbol, 1, 2.3, 5.seconds]
-    @yes = ['1', Object.new, /foo/, [], {}, Time.now, Class.new, Module.new, BigDecimal.new('4.56')]
+    @raise_dup = [nil, false, true, :symbol, 1, 2.3, 5.seconds, BigDecimal.new('4.56')]
+    @yes = ['1', Object.new, /foo/, [], {}, Time.now, Class.new, Module.new]
     @no = []
   end
   
