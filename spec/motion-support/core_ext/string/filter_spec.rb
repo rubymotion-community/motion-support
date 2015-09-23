@@ -4,6 +4,7 @@ describe "String" do
       before do
         @original = %{\u180E\u180E A string surrounded by unicode mongolian vowel separators,
           with tabs(\t\t), newlines(\n\n), unicode nextlines(\u0085\u0085) and many spaces(  ). \u180E\u180E}
+        @original.gsub!(/\u180E/, '') # mongolian vowel separators does not match [[:space:]]
 
         @expected = "A string surrounded by unicode mongolian vowel separators, " +
           "with tabs( ), newlines( ), unicode nextlines( ) and many spaces( )."
