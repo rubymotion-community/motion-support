@@ -2,11 +2,11 @@
 require File.expand_path('../motion/version', __FILE__)
 
 Gem::Specification.new do |s|
-  s.name        = "motion-support"
+  s.name        = "motion_blender-support"
   s.version     = MotionSupport::VERSION
-  s.authors     = ["Thomas Kadauke"]
-  s.email       = ["thomas.kadauke@googlemail.com"]
-  s.homepage    = "https://github.com/tkadauke/motion-support"
+  s.authors     = ['kayhide', "Thomas Kadauke"]
+  s.email       = ['kayhide@gmail.com', "thomas.kadauke@googlemail.com"]
+  s.homepage    = "https://github.com/kayhide/motion_blender-support"
   s.summary     = "Commonly useful extensions to the standard library for RubyMotion"
   s.description = "Commonly useful extensions to the standard library for RubyMotion. Ported from ActiveSupport."
 
