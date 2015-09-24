@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kayhide/motion_blender-support.svg?branch=master)](https://travis-ci.org/kayhide/motion_blender-support)
+
 This is a fork of [motion-support](https://github.com/rubymotion/motion-support).
 
 This works with [MotionBlender](https://github.com/kayhide/motion_blender) to solve dependencies in spite of [motion-require](https://github.com/clayallsopp/motion-require) which is originally adopted by MotionSupport.

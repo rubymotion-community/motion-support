@@ -1,0 +1,4 @@
+language: objective-c
+before_install:
+  - ruby --version
+  - sudo motion update
