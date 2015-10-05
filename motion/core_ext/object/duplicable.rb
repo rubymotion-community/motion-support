@@ -77,7 +77,11 @@ class Numeric
 end
 
 class BigDecimal
+  # BigDecimals are not duplicable:
+  #
+  #  BigDecimal.new('4.56').duplicable? # => false
+  #  BigDecimal.new('4.56').dup         # => TypeError: can't dup Fixnum
   def duplicable?
-    true
+    false
   end
 end

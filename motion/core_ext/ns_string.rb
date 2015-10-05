@@ -1,4 +1,4 @@
-motion_require "module/delegation"
+require_relative 'module/delegation'
 
 class NSString
   def to_s

@@ -1,4 +1,4 @@
-motion_require 'inflector/inflections'
+require_relative 'inflector/inflections'
 
 module MotionSupport
   Inflector.inflections do |inflect|

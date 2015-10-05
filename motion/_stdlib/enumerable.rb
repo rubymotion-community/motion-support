@@ -6,4 +6,14 @@ module Enumerable
     to_a.reverse_each(&block)
     self
   end
+
+  def to_hash
+    hash = Hash.new
+    each do |key, value|
+      hash[key] = value
+    end
+    hash
+  end
+
+  alias_method :to_h, :to_hash
 end

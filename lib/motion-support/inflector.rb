@@ -1,12 +1,8 @@
-require 'motion-require'
+require 'motion_blender'
+MotionBlender.add __FILE__
 
-files = [
-  "inflector/inflections",
-  "inflector/methods",
-  "inflections",
-  "core_ext/string/inflections",
-  
-  "core_ext/array/prepend_and_append"
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../motion", "#{file}.rb")) }
-
-Motion::Require.all(files)
+require_relative '../../motion/inflector/inflections'
+require_relative '../../motion/inflector/methods'
+require_relative '../../motion/inflections'
+require_relative '../../motion/core_ext/string/inflections'
+require_relative '../../motion/core_ext/array/prepend_and_append'

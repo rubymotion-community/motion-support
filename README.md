@@ -1,3 +1,9 @@
+[![Build Status](https://travis-ci.org/kayhide/motion_blender-support.svg?branch=master)](https://travis-ci.org/kayhide/motion_blender-support)
+
+This is a fork of [motion-support](https://github.com/rubymotion/motion-support).
+
+This works with [MotionBlender](https://github.com/kayhide/motion_blender) to solve dependencies in spite of [motion-require](https://github.com/clayallsopp/motion-require) which is originally adopted by MotionSupport.
+
 # MotionSupport
 
 This is a port of the parts of ActiveSupport that make sense for RubyMotion.
@@ -9,13 +15,13 @@ To see what's there, generate the documentation with the `rdoc` command from the
 Install with
 
 ```
-gem install motion-support
+gem install motion_blender-support
 ```
 
 or add to your `Gemfile`
 
 ```ruby
-gem 'motion-support'
+gem 'motion_blender-support'
 ```
 
 # API docs
@@ -27,7 +33,7 @@ gem 'motion-support'
 It is also possible to only use parts of this library. To do so, change your `Gemfile` so that it reads:
 
 ```ruby
-gem 'motion-support', :require => false
+gem 'motion_blender-support', :require => false
 ```
 
 Then add a require statement as shown below to your `Rakefile`.
