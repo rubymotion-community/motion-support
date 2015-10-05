@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.name        = "motion_blender-support"
   spec.version     = MotionSupport::VERSION
   spec.authors     = ['kayhide', "Thomas Kadauke"]
-  spec.email       = ['kayhide@gmail.com', "thomaspec.kadauke@googlemail.com"]
+  spec.email       = ['kayhide@gmail.com', "thomas.kadauke@googlemail.com"]
   spec.homepage    = "https://github.com/kayhide/motion_blender-support"
   spec.summary     = "Commonly useful extensions to the standard library for RubyMotion"
   spec.description = "Commonly useful extensions to the standard library for RubyMotion. Ported from ActiveSupport."
