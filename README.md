@@ -1,5 +1,7 @@
 # MotionSupport
 [![Build Status](https://travis-ci.org/rubymotion/motion-support.svg?branch=master)](https://travis-ci.org/rubymotion/motion-support)
+[![Gem Version](https://img.shields.io/gem/v/motion-support.svg)](https://rubygems.org/gems/motion-support)
+[![MIT Licensed](https://img.shields.io/github/license/rubymotion/motion-support.svg)](https://github.com/rubymotion/motion-support/blob/master/LICENSE)
 
 This is a port of the parts of ActiveSupport that make sense for RubyMotion.
 
@@ -305,7 +307,6 @@ Specifically:
 * String inquiry methods are missing
 * String multibyte methods are missing
 * `String#html_safe` and `ERB` extensions are not needed in RubyMotion
-* `Object#to_json` and subclasses are missing
 * `Range#to_s(:db)` was removed
 * The `rfc822` time format was removed, since it relies on time zone support.
 * Extensions to `LoadError` and `NameError` were removed
@@ -318,7 +319,6 @@ Specifically:
 Things to do / to decide:
 
 * RubyMotion lacks a `Date` class. in `_stdlib` there is a stub of a Date class that makes the `Date` extensions work. This stub needs to be completed.
-* Implement `Object#to_json`, probably best if implemented on top of Cocoa APIs
 * Implement `Object#to_xml`
 * Implement `Hash#from_xml`
 * Do we need `Hash#extractable_options?`?
@@ -344,12 +344,6 @@ Things to do / to decide:
 # Acknowledgements
 
 ActiveSupport was originally written as part of Ruby on Rails by David Heinemeier Hansson. Over the years, countless contributors made many additions. They made this library possible.
-
-# License
-
-MotionSupport is released under the MIT license:
-
-<http://www.opensource.org/licenses/MIT>
 
 # Forking
 
