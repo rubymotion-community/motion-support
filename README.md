@@ -1,4 +1,5 @@
 # MotionSupport
+[![Build Status](https://travis-ci.org/rubymotion/motion-support.svg?branch=master)](https://travis-ci.org/rubymotion/motion-support)
 
 This is a port of the parts of ActiveSupport that make sense for RubyMotion.
 
@@ -170,7 +171,7 @@ module Mod
   mattr_accessor :foo, :bar
   attr_internal :baz
   delegate :boo, :to => :foo
-  
+
   remove_method :baz
 end
 ```
