@@ -1,5 +1,11 @@
 language: objective-c
-
 osx_image: xcode7.1
-
 script: bundle exec rake spec
+deploy:
+  provider: rubygems
+  api_key:
+    secure: BA4jK37Z5iul3szro9p1YP7MScgbQ9ITEiJD01FBjQGBPXWteomYD9NF0dV0aDk+RHAQEogoX5Ubkmt8MKlo/72nosMGR56n+IbNkmcdpsykg8Bb62e/ZuYpnu7OvK3M9cgeq+HskHsRPQWoDoM5GnkNHMfx7ecp1a1bJ8eP614=
+  gem: motion-support
+  on:
+    tags: true
+    repo: rubymotion/motion-support
