@@ -8,8 +8,14 @@ class Date
       day_format = MotionSupport::Inflector.ordinalize(date.day)
       date.strftime("%B #{day_format}, %Y") # => "April 25th, 2007"
     },
-    :rfc822       => '%e %b %Y'
+    :rfc822       => '%e %b %Y',
+    :iso8601      => '%Y-%m-%d',
+    :xmlschema    => '%Y-%m-%dT00:00:00Z'
   }
+
+  def iso8601
+    strftime DATE_FORMATS[:iso8601]
+  end
 
   # Convert to a formatted string. See DATE_FORMATS for predefined formats.
   #
@@ -51,4 +57,8 @@ class Date
   end
   alias_method :default_inspect, :inspect
   alias_method :inspect, :readable_inspect
+
+  def xmlschema
+    strftime DATE_FORMATS[:xmlschema]
+  end
 end
