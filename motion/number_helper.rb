@@ -16,39 +16,61 @@ module MotionSupport
     #   number.
     # ==== Examples
     #
-    #   number_to_phone(5551234)                                     # => 555-1234
-    #   number_to_phone('5551234')                                   # => 555-1234
-    #   number_to_phone(1235551234)                                  # => 123-555-1234
-    #   number_to_phone(1235551234, area_code: true)                 # => (123) 555-1234
-    #   number_to_phone(1235551234, delimiter: ' ')                  # => 123 555 1234
-    #   number_to_phone(1235551234, area_code: true, extension: 555) # => (123) 555-1234 x 555
-    #   number_to_phone(1235551234, country_code: 1)                 # => +1-123-555-1234
-    #   number_to_phone('123a456')                                   # => 123a456
-    #
+    #   number_to_phone(5551234)
+    #     => 555-1234
+    #   number_to_phone('5551234')
+    #     => 555-1234
+    #   number_to_phone(1235551234)
+    #     => 123-555-1234
+    #   number_to_phone(1235551234, area_code: true)
+    #     => (123) 555-1234
+    #   number_to_phone(1235551234, delimiter: ' ')
+    #     => 123 555 1234
+    #   number_to_phone(1235551234, area_code: true, extension: 555)
+    #     => (123) 555-1234 x 555
+    #   number_to_phone(1235551234, country_code: 1)
+    #     => +1-123-555-1234
+    #   number_to_phone('123a456')
+    #     => 123a456
     #   number_to_phone(1235551234, country_code: 1, extension: 1343, delimiter: '.')
-    #   # => +1.123.555.1234 x 1343
+    #     => +1.123.555.1234 x 1343
     def number_to_phone(number, options = {})
       return unless number
       options = options.symbolize_keys
 
-      number       = number.to_s.strip
-      area_code    = options[:area_code]
-      delimiter    = options[:delimiter] || "-"
-      extension    = options[:extension]
-      country_code = options[:country_code]
+      delimiter = options[:delimiter] || "-"
+
+      str = ""
+      unless options[:country_code].blank?
+        str << "+#{options[:country_code]}#{delimiter}"
+      end
+      str << format_number(number, delimiter, options[:area_code])
+      str << " x #{options[:extension]}" unless options[:extension].blank?
+      str
+    end
+
+    protected
+
+    def format_number(number, delimiter, area_code)
+      number_string = number.to_s.strip
 
       if area_code
-        number.gsub!(/(\d{1,3})(\d{3})(\d{4}$)/,"(\\1) \\2#{delimiter}\\3")
-      else
-        number.gsub!(/(\d{0,3})(\d{3})(\d{4})$/,"\\1#{delimiter}\\2#{delimiter}\\3")
-        number.slice!(0, 1) if number.start_with?(delimiter) && !delimiter.blank?
+        return number_string.gsub!(
+          /(\d{1,3})(\d{3})(\d{4}$)/,
+          "(\\1) \\2#{delimiter}\\3"
+        ).to_s
       end
 
-      str = ''
-      str << "+#{country_code}#{delimiter}" unless country_code.blank?
-      str << number
-      str << " x #{extension}" unless extension.blank?
-      str
+      number_string.gsub!(
+        /(\d{0,3})(\d{3})(\d{4})$/,
+        "\\1#{delimiter}\\2#{delimiter}\\3"
+      ).to_s
+
+      if delimiter.present? && number_string.start_with?(delimiter)
+        number_string.slice!(0, 1)
+      end
+
+      number_string
     end
   end
 end
