@@ -7,7 +7,8 @@ module MotionSupport
     attr_accessor :value, :parts
 
     def initialize(value, parts) #:nodoc:
-      @value, @parts = value, parts
+      @value = value
+      @parts = parts
     end
 
     # Adds another Duration or a Numeric to this Duration. Numeric values
@@ -27,7 +28,7 @@ module MotionSupport
     end
 
     def -@ #:nodoc:
-      Duration.new(-value, parts.map { |type,number| [type, -number] })
+      Duration.new(-value, parts.map { |type, number| [type, -number] })
     end
 
     def is_a?(klass) #:nodoc:
@@ -66,7 +67,7 @@ module MotionSupport
     alias :until :ago
 
     def inspect #:nodoc:
-      consolidated = parts.inject(::Hash.new(0)) { |h,(l,r)| h[l] += r; h }
+      consolidated = parts.inject(::Hash.new(0)) { |h, (l, r)| h[l] += r; h }
       parts = [:years, :months, :days, :minutes, :seconds].map do |length|
         n = consolidated[length]
         "#{n} #{n == 1 ? length.to_s.singularize : length.to_s}" if n.nonzero?
@@ -75,14 +76,14 @@ module MotionSupport
       parts.to_sentence
     end
 
-    def as_json(options = nil) #:nodoc:
+    def as_json(_options = nil) #:nodoc:
       to_i
     end
 
-  protected
+    protected
 
     def sum(sign, time = ::Time.now) #:nodoc:
-      parts.inject(time) do |t,(type,number)|
+      parts.inject(time) do |t, (type, number)|
         if t.acts_like?(:time) || t.acts_like?(:date)
           if type == :seconds
             t.since(sign * number)
@@ -95,7 +96,7 @@ module MotionSupport
       end
     end
 
-  private
+    private
 
     def method_missing(method, *args, &block) #:nodoc:
       value.send(method, *args, &block)

@@ -32,15 +32,15 @@ class Array
     options.assert_valid_keys(:words_connector, :two_words_connector, :last_word_connector)
 
     default_connectors = {
-      :words_connector     => ', ',
-      :two_words_connector => ' and ',
-      :last_word_connector => ', and '
+      :words_connector     => ", ",
+      :two_words_connector => " and ",
+      :last_word_connector => ", and "
     }
     options = default_connectors.merge!(options)
 
     case length
     when 0
-      ''
+      ""
     when 1
       self[0].to_s.dup
     when 2
@@ -73,9 +73,9 @@ class Array
     case format
     when :db
       if empty?
-        'null'
+        "null"
       else
-        collect { |element| element.id }.join(',')
+        map(&:id).join(",")
       end
     else
       to_default_s

@@ -14,9 +14,9 @@ class String
 
   # Performs a destructive squish. See String#squish.
   def squish!
-    gsub!(/\A[[:space:]]+/, '')
-    gsub!(/[[:space:]]+\z/, '')
-    gsub!(/[[:space:]]+/, ' ')
+    gsub!(/\A[[:space:]]+/, "")
+    gsub!(/[[:space:]]+\z/, "")
+    gsub!(/[[:space:]]+/, " ")
     self
   end
 
@@ -41,7 +41,7 @@ class String
   def truncate(truncate_at, options = {})
     return dup unless length > truncate_at
 
-    options[:omission] ||= '...'
+    options[:omission] ||= "..."
     length_with_room_for_omission = truncate_at - options[:omission].length
     stop = \
       if options[:separator]

@@ -68,11 +68,11 @@ class NilClass
   #
   # With +try+
   #   @person.try(:children).try(:first).try(:name)
-  def try(*args)
+  def try(*_args)
     nil
   end
 
-  def try!(*args)
+  def try!(*_args)
     nil
   end
 end

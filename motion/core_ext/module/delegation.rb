@@ -115,27 +115,27 @@ class Module
   def delegate(*methods)
     options = methods.pop
     unless options.is_a?(Hash) && to = options[:to]
-      raise ArgumentError, 'Delegation needs a target. Supply an options hash with a :to key as the last argument (e.g. delegate :hello, to: :greeter).'
+      raise ArgumentError, "Delegation needs a target. Supply an options hash with a :to key as the last argument (e.g. delegate :hello, to: :greeter)."
     end
 
     prefix, allow_nil = options.values_at(:prefix, :allow_nil)
     unguarded = !allow_nil
 
     if prefix == true && to =~ /^[^a-z_]/
-      raise ArgumentError, 'Can only automatically set the delegation prefix when delegating to a method.'
+      raise ArgumentError, "Can only automatically set the delegation prefix when delegating to a method."
     end
 
     method_prefix = \
       if prefix
         "#{prefix == true ? to : prefix}_"
       else
-        ''
+        ""
       end
 
-    reference, *hierarchy = to.to_s.split('.')
+    reference, *hierarchy = to.to_s.split(".")
     entry = resolver =
       case reference
-      when 'self'
+      when "self"
         ->(_self) { _self }
       when /^@@/
         ->(_self) { _self.class.class_variable_get(reference) }
@@ -146,7 +146,7 @@ class Module
       else
         ->(_self) { _self.send(reference) }
       end
-    resolver = ->(_self) { hierarchy.reduce(entry.call(_self)) { |obj, method| obj.public_send(method) } } unless hierarchy.empty?
+    resolver = ->(_self) { hierarchy.inject(entry.call(_self)) { |obj, method| obj.public_send(method) } } unless hierarchy.empty?
 
     methods.each do |method|
       module_exec do
@@ -165,7 +165,7 @@ class Module
             begin
               target.public_send(method, *args, &block)
             rescue target.nil? && NoMethodError # only rescue NoMethodError when target is nil
-              raise "#{self}##{method_prefix}#{method} delegated to #{to}.#{method}, but #{to} is nil: #{self.inspect}"
+              raise "#{self}##{method_prefix}#{method} delegated to #{to}.#{method}, but #{to} is nil: #{inspect}"
             end
           end
         end

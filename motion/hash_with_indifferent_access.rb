@@ -1,4 +1,4 @@
-motion_require 'core_ext/hash/keys'
+motion_require "core_ext/hash/keys"
 
 module MotionSupport
   # Implements a hash where keys <tt>:foo</tt> and <tt>"foo"</tt> are considered
@@ -172,7 +172,7 @@ module MotionSupport
     #   hash[:b] = 'y'
     #   hash.values_at('a', 'b') # => ["x", "y"]
     def values_at(*indices)
-      indices.collect {|key| self[convert_key(key)]}
+      indices.map { |key| self[convert_key(key)] }
     end
 
     # Returns an exact copy of the hash.
@@ -186,7 +186,7 @@ module MotionSupport
     # modify the receiver but rather returns a new hash with indifferent
     # access with the result of the merge.
     def merge(hash, &block)
-      self.dup.update(hash, &block)
+      dup.update(hash, &block)
     end
 
     # Like +merge+ but the other way around: Merges the receiver into the
@@ -201,7 +201,7 @@ module MotionSupport
 
     # Same semantics as +reverse_merge+ but modifies the receiver in-place.
     def reverse_merge!(other_hash)
-      replace(reverse_merge( other_hash ))
+      replace(reverse_merge(other_hash))
     end
 
     # Replaces the contents of this hash with other_hash.
@@ -218,13 +218,18 @@ module MotionSupport
     end
 
     def stringify_keys!; self end
+
     def deep_stringify_keys!; self end
+
     def stringify_keys; dup end
+
     def deep_stringify_keys; dup end
     undef :symbolize_keys!
     undef :deep_symbolize_keys!
     def symbolize_keys; to_hash.symbolize_keys end
+
     def deep_symbolize_keys; to_hash.deep_symbolize_keys end
+
     def to_options!; self end
 
     # Convert to a regular hash with string keys.
@@ -233,20 +238,21 @@ module MotionSupport
     end
 
     protected
-      def convert_key(key)
-        key.kind_of?(Symbol) ? key.to_s : key
-      end
 
-      def convert_value(value)
-        if value.is_a? Hash
-          value.nested_under_indifferent_access
-        elsif value.is_a?(Array)
-          value = value.dup if value.frozen?
-          value.map! { |e| convert_value(e) }
-        else
-          value
-        end
+    def convert_key(key)
+      key.is_a?(Symbol) ? key.to_s : key
+    end
+
+    def convert_value(value)
+      if value.is_a? Hash
+        value.nested_under_indifferent_access
+      elsif value.is_a?(Array)
+        value = value.dup if value.frozen?
+        value.map! { |e| convert_value(e) }
+      else
+        value
       end
+    end
   end
 end
 

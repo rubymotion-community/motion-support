@@ -1,19 +1,19 @@
 class Time
   DATE_FORMATS = {
-    :db           => '%Y-%m-%d %H:%M:%S',
-    :number       => '%Y%m%d%H%M%S',
-    :nsec         => '%Y%m%d%H%M%S%9N',
-    :time         => '%H:%M',
-    :short        => '%d %b %H:%M',
-    :long         => '%B %d, %Y %H:%M',
-    :long_ordinal => lambda { |time|
+    :db           => "%Y-%m-%d %H:%M:%S",
+    :number       => "%Y%m%d%H%M%S",
+    :nsec         => "%Y%m%d%H%M%S%9N",
+    :time         => "%H:%M",
+    :short        => "%d %b %H:%M",
+    :long         => "%B %d, %Y %H:%M",
+    :long_ordinal => lambda do |time|
       day_format = MotionSupport::Inflector.ordinalize(time.day)
       time.strftime("%B #{day_format}, %Y %H:%M")
-    },
-    :rfc822       => lambda { |time|
+    end,
+    :rfc822 => lambda do |time|
       offset_format = time.formatted_offset(false)
       time.strftime("%a, %d %b %Y %H:%M:%S #{offset_format}")
-    }
+    end
   }
 
   # Converts to a formatted string. See DATE_FORMATS for builtin formats.

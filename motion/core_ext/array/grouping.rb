@@ -69,7 +69,7 @@ class Array
       length = division + (modulo > 0 && modulo > index ? 1 : 0)
       groups << last_group = slice(start, length)
       last_group << fill_with if fill_with != false &&
-        modulo > 0 && length == division
+          modulo > 0 && length == division
       start += length
     end
 

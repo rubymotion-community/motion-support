@@ -44,9 +44,9 @@ class Module
   def parents
     parents = []
     if parent_name
-      parts = parent_name.split('::')
+      parts = parent_name.split("::")
       until parts.empty?
-        parents << (parts * '::').constantize
+        parents << (parts * "::").constantize
         parts.pop
       end
     end

@@ -52,7 +52,9 @@ module MotionSupport
       else
         string = string.sub(/^(?:#{inflections.acronym_regex}(?=\b|[A-Z_])|\w)/) { $&.downcase }
       end
-      string.gsub(/(?:_|(\/))([a-z\d]*)/i) { "#{$1}#{inflections.acronyms[$2] || $2.capitalize}" }.gsub('/', '::')
+      string.gsub(/(?:_|(\/))([a-z\d]*)/i) do
+        "#{$1}#{inflections.acronyms[$2] || $2.capitalize}"
+      end.gsub("/", "::")
     end
 
     # Makes an underscored, lowercase form from the expression in the string.
@@ -68,10 +70,12 @@ module MotionSupport
     #   'SSLError'.underscore.camelize # => "SslError"
     def underscore(camel_cased_word)
       word = camel_cased_word.to_s.dup
-      word.gsub!('::', '/')
-      word.gsub!(/(?:([A-Za-z\d])|^)(#{inflections.acronym_regex})(?=\b|[^a-z])/) { "#{$1}#{$1 && '_'}#{$2.downcase}" }
-      word.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
-      word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+      word.gsub!("::", "/")
+      word.gsub!(/(?:([A-Za-z\d])|^)(#{inflections.acronym_regex})(?=\b|[^a-z])/) do
+        "#{$1}#{$1 && '_'}#{$2.downcase}"
+      end
+      word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
+      word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
       word.tr!("-", "_")
       word.downcase!
       word
@@ -87,10 +91,10 @@ module MotionSupport
       result = lower_case_and_underscored_word.to_s.dup
       inflections.humans.each { |(rule, replacement)| break if result.sub!(rule, replacement) }
       result.gsub!(/_id$/, "")
-      result.tr!('_', ' ')
-      result.gsub(/([a-z\d]*)/i) { |match|
+      result.tr!("_", " ")
+      result.gsub(/([a-z\d]*)/i) do |match|
         "#{inflections.acronyms[match] || match.downcase}"
-      }.gsub(/^\w/) { $&.upcase }
+      end.gsub(/^\w/) { $&.upcase }
     end
 
     # Capitalizes all the words and replaces some characters in the string to
@@ -129,14 +133,14 @@ module MotionSupport
     #   'business'.classify     # => "Busines"
     def classify(table_name)
       # strip out any leading schema name
-      camelize(singularize(table_name.to_s.sub(/.*\./, '')))
+      camelize(singularize(table_name.to_s.sub(/.*\./, "")))
     end
 
     # Replaces underscores with dashes in the string.
     #
     #   'puni_puni'.dasherize # => "puni-puni"
     def dasherize(underscored_word)
-      underscored_word.tr('_', '-')
+      underscored_word.tr("_", "-")
     end
 
     # Removes the module part from the expression in the string.
@@ -147,11 +151,8 @@ module MotionSupport
     # See also +deconstantize+.
     def demodulize(path)
       path = path.to_s
-      if i = path.rindex('::')
-        path[(i+2)..-1]
-      else
-        path
-      end
+      return path[(i + 2)..-1] if i = path.rindex("::")
+      path
     end
 
     # Removes the rightmost segment from the constant expression in the string.
@@ -164,7 +165,8 @@ module MotionSupport
     #
     # See also +demodulize+.
     def deconstantize(path)
-      path.to_s[0...(path.rindex('::') || 0)] # implementation based on the one in facets' Module#spacename
+      # implementation based on the one in facets' Module#spacename
+      path.to_s[0...(path.rindex("::") || 0)]
     end
 
     # Creates a foreign key name from a class name.
@@ -175,7 +177,8 @@ module MotionSupport
     #   'Message'.foreign_key(false) # => "messageid"
     #   'Admin::Post'.foreign_key    # => "post_id"
     def foreign_key(class_name, separate_class_name_and_id_with_underscore = true)
-      underscore(demodulize(class_name)) + (separate_class_name_and_id_with_underscore ? "_id" : "id")
+      underscore(demodulize(class_name)) +
+        (separate_class_name_and_id_with_underscore ? "_id" : "id")
     end
 
     # Tries to find a constant with the name specified in the argument string.
@@ -197,7 +200,7 @@ module MotionSupport
     # NameError is raised when the name is not in CamelCase or the constant is
     # unknown.
     def constantize(camel_cased_word)
-      names = camel_cased_word.split('::')
+      names = camel_cased_word.split("::")
       names.shift if names.empty? || names.first.empty?
 
       names.inject(Object) do |constant, name|
@@ -247,8 +250,9 @@ module MotionSupport
     def safe_constantize(camel_cased_word)
       constantize(camel_cased_word)
     rescue NameError => e
-      raise unless e.message =~ /(uninitialized constant|wrong constant name) #{const_regexp(camel_cased_word)}$/ ||
-        e.name.to_s == camel_cased_word.to_s
+      matcher =
+        /(uninitialized constant|wrong constant name) #{const_regexp(camel_cased_word)}$/
+      raise unless e.message =~ matcher || e.name.to_s == camel_cased_word.to_s
     rescue ArgumentError => e
       raise unless e.message =~ /not missing constant #{const_regexp(camel_cased_word)}\!$/
     end
@@ -265,15 +269,13 @@ module MotionSupport
     def ordinal(number)
       abs_number = number.to_i.abs
 
-      if (11..13).include?(abs_number % 100)
-        "th"
-      else
-        case abs_number % 10
-          when 1; "st"
-          when 2; "nd"
-          when 3; "rd"
-          else    "th"
-        end
+      return "th" if (11..13).include?(abs_number % 100)
+
+      case abs_number % 10
+      when 1; "st"
+      when 2; "nd"
+      when 3; "rd"
+      else    "th"
       end
     end
 

@@ -1,5 +1,5 @@
 class AppDelegate
-  def application(application, didFinishLaunchingWithOptions:launchOptions)
+  def application(_application, didFinishLaunchingWithOptions:launchOptions)
     true
   end
 end

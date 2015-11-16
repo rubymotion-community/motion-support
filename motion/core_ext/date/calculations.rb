@@ -79,7 +79,7 @@ class Date
   end
   alias_method :plus_without_duration, :+
   alias_method :+, :plus_with_duration
-  
+
   def minus_with_duration(other) #:nodoc:
     if MotionSupport::Duration === other
       plus_with_duration(-other)
@@ -97,8 +97,8 @@ class Date
     d = self
     d = d >> options.delete(:years) * 12 if options[:years]
     d = d >> options.delete(:months)     if options[:months]
-    d = d +  options.delete(:weeks) * 7  if options[:weeks]
-    d = d +  options.delete(:days)       if options[:days]
+    d += options.delete(:weeks) * 7  if options[:weeks]
+    d += options.delete(:days)       if options[:days]
     d
   end
 

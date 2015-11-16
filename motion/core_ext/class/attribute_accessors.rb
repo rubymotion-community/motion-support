@@ -30,7 +30,7 @@ class Class
   def cattr_reader(*syms)
     options = syms.extract_options!
     syms.each do |sym|
-      raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
+      raise NameError.new("invalid attribute name") unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         unless class_variable_defined?("@@#{sym}")
           class_variable_set("@@#{sym}", nil)
@@ -91,7 +91,7 @@ class Class
   def cattr_writer(*syms)
     options = syms.extract_options!
     syms.each do |sym|
-      raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
+      raise NameError.new("invalid attribute name") unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         unless class_variable_defined?("@@#{sym}")
           class_variable_set("@@#{sym}", nil)

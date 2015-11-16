@@ -1,4 +1,4 @@
-motion_require '../core_ext/array/prepend_and_append'
+motion_require "../core_ext/array/prepend_and_append"
 
 module MotionSupport
   module Inflector
@@ -28,7 +28,12 @@ module MotionSupport
       attr_reader :plurals, :singulars, :uncountables, :humans, :acronyms, :acronym_regex
 
       def initialize
-        @plurals, @singulars, @uncountables, @humans, @acronyms, @acronym_regex = [], [], [], [], {}, /(?=a)b/
+        @plurals = []
+        @singulars = []
+        @uncountables = []
+        @humans = []
+        @acronyms = {}
+        @acronym_regex = /(?=a)b/
       end
 
       # Private, for the test suite.
@@ -136,14 +141,14 @@ module MotionSupport
           singular(/(#{s0})#{srest}$/i, '\1' + srest)
           singular(/(#{p0})#{prest}$/i, '\1' + srest)
         else
-          plural(/#{s0.upcase}(?i)#{srest}$/,   p0.upcase   + prest)
+          plural(/#{s0.upcase}(?i)#{srest}$/,   p0.upcase + prest)
           plural(/#{s0.downcase}(?i)#{srest}$/, p0.downcase + prest)
-          plural(/#{p0.upcase}(?i)#{prest}$/,   p0.upcase   + prest)
+          plural(/#{p0.upcase}(?i)#{prest}$/,   p0.upcase + prest)
           plural(/#{p0.downcase}(?i)#{prest}$/, p0.downcase + prest)
 
-          singular(/#{s0.upcase}(?i)#{srest}$/,   s0.upcase   + srest)
+          singular(/#{s0.upcase}(?i)#{srest}$/,   s0.upcase + srest)
           singular(/#{s0.downcase}(?i)#{srest}$/, s0.downcase + srest)
-          singular(/#{p0.upcase}(?i)#{prest}$/,   s0.upcase   + srest)
+          singular(/#{p0.upcase}(?i)#{prest}$/,   s0.upcase + srest)
           singular(/#{p0.downcase}(?i)#{prest}$/, s0.downcase + srest)
         end
       end
@@ -178,10 +183,13 @@ module MotionSupport
       #   clear :plurals
       def clear(scope = :all)
         case scope
-          when :all
-            @plurals, @singulars, @uncountables, @humans = [], [], [], []
-          else
-            instance_variable_set "@#{scope}", []
+        when :all
+          @plurals = []
+          @singulars = []
+          @uncountables = []
+          @humans = []
+        else
+          instance_variable_set "@#{scope}", []
         end
       end
     end

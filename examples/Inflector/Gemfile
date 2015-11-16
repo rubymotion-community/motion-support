@@ -1,5 +1,5 @@
 source "http://rubygems.org"
 
-gem 'rake'
-gem 'motion-require'
-gem 'formotion'
+gem "rake"
+gem "motion-require"
+gem "formotion"

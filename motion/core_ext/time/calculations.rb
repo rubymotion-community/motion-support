@@ -61,7 +61,7 @@ class Time
     elsif zone
       ::Time.local(new_year, new_month, new_day, new_hour, new_min, new_sec, new_usec)
     else
-      ::Time.new(new_year, new_month, new_day, new_hour, new_min, new_sec + (new_usec.to_r / 1000000), utc_offset)
+      ::Time.new(new_year, new_month, new_day, new_hour, new_min, new_sec + (new_usec.to_r / 1_000_000), utc_offset)
     end
   end
 
@@ -84,8 +84,8 @@ class Time
     time_advanced_by_date = change(:year => d.year, :month => d.month, :day => d.day)
     seconds_to_advance = \
       options.fetch(:seconds, 0) +
-      options.fetch(:minutes, 0) * 60 +
-      options.fetch(:hours, 0) * 3600
+        options.fetch(:minutes, 0) * 60 +
+        options.fetch(:hours, 0) * 3600
 
     if seconds_to_advance.zero?
       time_advanced_by_date
@@ -109,7 +109,7 @@ class Time
 
   # Returns a new Time representing the start of the day (0:00)
   def beginning_of_day
-    #(self - seconds_since_midnight).change(usec: 0)
+    # (self - seconds_since_midnight).change(usec: 0)
     change(:hour => 0)
   end
   alias :midnight :beginning_of_day
@@ -122,7 +122,7 @@ class Time
       :hour => 23,
       :min => 59,
       :sec => 59,
-      :usec => Rational(999999999, 1000)
+      :usec => Rational(999_999_999, 1000)
     )
   end
   alias :at_end_of_day :end_of_day
@@ -138,7 +138,7 @@ class Time
     change(
       :min => 59,
       :sec => 59,
-      :usec => Rational(999999999, 1000)
+      :usec => Rational(999_999_999, 1000)
     )
   end
   alias :at_end_of_hour :end_of_hour
@@ -153,7 +153,7 @@ class Time
   def end_of_minute
     change(
       :sec => 59,
-      :usec => Rational(999999999, 1000)
+      :usec => Rational(999_999_999, 1000)
     )
   end
   alias :at_end_of_minute :end_of_minute
@@ -211,5 +211,4 @@ class Time
   end
   alias_method :compare_without_coercion, :<=>
   alias_method :<=>, :compare_with_coercion
-
 end

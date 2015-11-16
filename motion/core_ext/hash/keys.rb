@@ -29,13 +29,13 @@ class Hash
   #   hash.stringify_keys
   #   #=> { "name" => "Rob", "age" => "28" }
   def stringify_keys
-    transform_keys{ |key| key.to_s }
+    transform_keys(&:to_s)
   end
 
   # Destructively convert all keys to strings. Same as
   # +stringify_keys+, but modifies +self+.
   def stringify_keys!
-    transform_keys!{ |key| key.to_s }
+    transform_keys!(&:to_s)
   end
 
   # Return a new hash with all keys converted to symbols, as long as
@@ -46,14 +46,26 @@ class Hash
   #   hash.symbolize_keys
   #   #=> { name: "Rob", age: "28" }
   def symbolize_keys
-    transform_keys{ |key| key.to_sym rescue key }
+    transform_keys do |key|
+      begin
+                            key.to_sym
+                          rescue
+                            key
+                          end
+    end
   end
-  alias_method :to_options,  :symbolize_keys
+  alias_method :to_options, :symbolize_keys
 
   # Destructively convert all keys to symbols, as long as they respond
   # to +to_sym+. Same as +symbolize_keys+, but modifies +self+.
   def symbolize_keys!
-    transform_keys!{ |key| key.to_sym rescue key }
+    transform_keys! do |key|
+      begin
+                             key.to_sym
+                           rescue
+                             key
+                           end
+    end
   end
   alias_method :to_options!, :symbolize_keys!
 
@@ -83,11 +95,11 @@ class Hash
     result = {}
     each do |key, value|
       result[yield(key)] = if value.is_a?(Hash)
-        value.deep_transform_keys(&block)
-      elsif value.is_a?(Array)
-        value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
-      else
-       value
+                             value.deep_transform_keys(&block)
+                           elsif value.is_a?(Array)
+                             value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
+                           else
+                             value
       end
     end
     result
@@ -100,11 +112,11 @@ class Hash
     keys.each do |key|
       value = delete(key)
       self[yield(key)] = if value.is_a?(Hash)
-        value.deep_transform_keys(&block)
-      elsif value.is_a?(Array)
-        value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
-      else
-       value
+                           value.deep_transform_keys(&block)
+                         elsif value.is_a?(Array)
+                           value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
+                         else
+                           value
       end
     end
     self
@@ -119,14 +131,14 @@ class Hash
   #   hash.deep_stringify_keys
   #   # => { "person" => { "name" => "Rob", "age" => "28" } }
   def deep_stringify_keys
-    deep_transform_keys{ |key| key.to_s }
+    deep_transform_keys(&:to_s)
   end
 
   # Destructively convert all keys to strings.
   # This includes the keys from the root hash and from all
   # nested hashes.
   def deep_stringify_keys!
-    deep_transform_keys!{ |key| key.to_s }
+    deep_transform_keys!(&:to_s)
   end
 
   # Return a new hash with all keys converted to symbols, as long as
@@ -138,13 +150,25 @@ class Hash
   #   hash.deep_symbolize_keys
   #   # => { person: { name: "Rob", age: "28" } }
   def deep_symbolize_keys
-    deep_transform_keys{ |key| key.to_sym rescue key }
+    deep_transform_keys do |key|
+      begin
+                                 key.to_sym
+                               rescue
+                                 key
+                               end
+    end
   end
 
   # Destructively convert all keys to symbols, as long as they respond
   # to +to_sym+. This includes the keys from the root hash and from all
   # nested hashes.
   def deep_symbolize_keys!
-    deep_transform_keys!{ |key| key.to_sym rescue key }
+    deep_transform_keys! do |key|
+      begin
+                                  key.to_sym
+                                rescue
+                                  key
+                                end
+    end
   end
 end

@@ -1,4 +1,4 @@
-motion_require 'to_param'
+motion_require "to_param"
 
 class Object
   # Converts an object into a string suitable for use as a URL query string, using the given <tt>key</tt> as the
@@ -17,7 +17,7 @@ class Array
   #   ['Rails', 'coding'].to_query('hobbies') # => "hobbies%5B%5D=Rails&hobbies%5B%5D=coding"
   def to_query(key)
     prefix = "#{key}[]"
-    collect { |value| value.to_query(prefix) }.join '&'
+    map { |value| value.to_query(prefix) }.join "&"
   end
 end
 

@@ -78,7 +78,7 @@ module DateAndTime
     # Returns a new date/time at the start of the month.
     # DateTime objects will have a time set to 0:00.
     def beginning_of_month
-      first_hour{ change(:day => 1) }
+      first_hour { change(:day => 1) }
     end
     alias :at_beginning_of_month :beginning_of_month
 
@@ -113,7 +113,7 @@ module DateAndTime
     # +Date.beginning_of_week+ or +config.beginning_of_week+ when set.
     # DateTime objects have their time set to 0:00.
     def next_week(start_day = Date.beginning_of_week)
-      first_hour{ weeks_since(1).beginning_of_week.days_since(days_span(start_day)) }
+      first_hour { weeks_since(1).beginning_of_week.days_since(days_span(start_day)) }
     end
 
     # Short-hand for months_since(1).
@@ -136,7 +136,7 @@ module DateAndTime
     # +Date.beginning_of_week+ or +config.beginning_of_week+ when set.
     # DateTime objects have their time set to 0:00.
     def prev_week(start_day = Date.beginning_of_week)
-      first_hour{ weeks_ago(1).beginning_of_week.days_since(days_span(start_day)) }
+      first_hour { weeks_ago(1).beginning_of_week.days_since(days_span(start_day)) }
     end
     alias_method :last_week, :prev_week
 
@@ -188,7 +188,7 @@ module DateAndTime
     # +Date.beginning_of_week+ or +config.beginning_of_week+ when set.
     # DateTime objects have their time set to 23:59:59.
     def end_of_week(start_day = Date.beginning_of_week)
-      last_hour{ days_since(6 - days_to_week_start(start_day)) }
+      last_hour { days_since(6 - days_to_week_start(start_day)) }
     end
     alias :at_end_of_week :end_of_week
 
@@ -202,7 +202,7 @@ module DateAndTime
     # DateTime objects will have a time set to 23:59:59.
     def end_of_month
       last_day = ::Time.days_in_month(month, year)
-      last_hour{ days_since(last_day - day) }
+      last_hour { days_since(last_day - day) }
     end
     alias :at_end_of_month :end_of_month
 

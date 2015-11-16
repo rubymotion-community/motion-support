@@ -10,11 +10,11 @@ class Hash
       next if block.call(key, value)
 
       result[key] = if value.is_a?(Hash)
-        value.deep_delete_if(&block)
-      elsif value.is_a?(Array)
-        value.map { |v| v.is_a?(Hash) ? v.deep_delete_if(&block) : v }
-      else
-       value
+                      value.deep_delete_if(&block)
+                    elsif value.is_a?(Array)
+                      value.map { |v| v.is_a?(Hash) ? v.deep_delete_if(&block) : v }
+                    else
+                      value
       end
     end
 

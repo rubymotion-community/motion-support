@@ -23,7 +23,8 @@ class Module
   def alias_method_chain(target, feature)
     # Strip out punctuation on predicates or bang methods since
     # e.g. target?_without_feature is not a valid method name.
-    aliased_target, punctuation = target.to_s.sub(/([?!=])$/, ''), $1
+    aliased_target = target.to_s.sub(/([?!=])$/, "")
+    punctuation = $1
     yield(aliased_target, punctuation) if block_given?
 
     with_method = "#{aliased_target}_with_#{feature}#{punctuation}"
@@ -61,9 +62,9 @@ class Module
   #   e.title    # => "Megastars"
   def alias_attribute(new_name, old_name)
     module_exec do
-      define_method(new_name) { self.send(old_name) }          # def subject; self.title; end
-      define_method("#{new_name}?") { self.send("#{old_name}?") }        # def subject?; self.title?; end
-      define_method("#{new_name}=") { |v| self.send("#{old_name}=", v) }  # def subject=(v); self.title = v; end
+      define_method(new_name) { send(old_name) } # def subject; self.title; end
+      define_method("#{new_name}?") { send("#{old_name}?") } # def subject?; self.title?; end
+      define_method("#{new_name}=") { |v| send("#{old_name}=", v) } # def subject=(v); self.title = v; end
     end
   end
 end

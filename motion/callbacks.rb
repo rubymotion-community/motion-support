@@ -1,4 +1,4 @@
-motion_require 'concern'
+motion_require "concern"
 
 module MotionSupport
   # Callbacks are code hooks that are run at key points in an object's lifecycle.
@@ -78,7 +78,7 @@ module MotionSupport
     # A hook invoked everytime a before callback is halted.
     # This can be overridden in AS::Callback implementors in order
     # to provide better debugging/logging.
-    def halted_callback_hook(filter)
+    def halted_callback_hook(_filter)
     end
 
     class Callback #:nodoc:#
@@ -87,11 +87,14 @@ module MotionSupport
       attr_accessor :chain, :filter, :kind, :options, :klass, :raw_filter
 
       def initialize(chain, filter, kind, options, klass)
-        @chain, @kind, @klass = chain, kind, klass
+        @chain = chain
+        @kind = kind
+        @klass = klass
         normalize_options!(options)
 
-        @raw_filter, @options = filter, options
-        @filter               = _compile_filter(filter)
+        @raw_filter = filter
+        @options = options
+        @filter = _compile_filter(filter)
         recompile_options!
       end
 
@@ -132,7 +135,7 @@ module MotionSupport
       end
 
       def recompile!(_options)
-        _update_filter(self.options, _options)
+        _update_filter(options, _options)
 
         recompile_options!
       end
@@ -144,11 +147,9 @@ module MotionSupport
           lambda do |obj, value, halted|
             if !halted && @compiled_options.call(obj)
               result = @filter.call(obj)
-              
+
               halted = chain.config[:terminator].call(result)
-              if halted
-                obj.halted_callback_hook(@raw_filter.inspect)
-              end
+              obj.halted_callback_hook(@raw_filter.inspect) if halted
             end
             code.call(obj, value, halted)
           end
@@ -176,22 +177,23 @@ module MotionSupport
         end
       end
 
-    private
+      private
+
       # Options support the same options as filters themselves (and support
       # symbols, string, procs, and objects), so compile a conditional
       # expression based on the options.
       def recompile_options!
-        @conditions = [ lambda { |obj| true } ]
+        @conditions = [->(_obj) { true }]
 
         unless options[:if].empty?
           @conditions << Array(_compile_filter(options[:if]))
         end
 
         unless options[:unless].empty?
-          @conditions << Array(_compile_filter(options[:unless])).map {|f| lambda { |obj| !f.call(obj) } }
+          @conditions << Array(_compile_filter(options[:unless])).map { |f| ->(obj) { !f.call(obj) } }
         end
 
-        @compiled_options = lambda { |obj| @conditions.flatten.all? { |c| c.call(obj) } }
+        @compiled_options = ->(obj) { @conditions.flatten.all? { |c| c.call(obj) } }
       end
 
       # Filters support:
@@ -215,9 +217,9 @@ module MotionSupport
       def _compile_filter(filter)
         case filter
         when Array
-          lambda { |obj, &block| filter.all? {|f| _compile_filter(f).call(obj, &block) } }
+          ->(obj, &block) { filter.all? { |f| _compile_filter(f).call(obj, &block) } }
         when Symbol, String
-          lambda { |obj, &block| obj.send filter, &block }
+          ->(obj, &block) { obj.send filter, &block }
         when Proc
           filter
         else
@@ -225,7 +227,7 @@ module MotionSupport
           @klass.send(:define_method, "#{method_name}_object") { filter }
 
           scopes = Array(chain.config[:scope])
-          method_to_call = scopes.map{ |s| s.is_a?(Symbol) ? send(s) : s }.join("_")
+          method_to_call = scopes.map { |s| s.is_a?(Symbol) ? send(s) : s }.join("_")
 
           @klass.class_eval do
             define_method method_name do |&blk|
@@ -233,7 +235,7 @@ module MotionSupport
             end
           end
 
-          lambda { |obj, &block| obj.send method_name, &block }
+          ->(obj, &block) { obj.send method_name, &block }
         end
       end
     end
@@ -245,8 +247,8 @@ module MotionSupport
       def initialize(name, config)
         @name = name
         @config = {
-          :terminator => lambda { |result| false },
-          :scope => [ :kind ]
+          :terminator => ->(_result) { false },
+          :scope => [:kind]
         }.merge!(config)
       end
 
@@ -255,15 +257,15 @@ module MotionSupport
           value = nil
           halted = false
 
-          callbacks = lambda do |obj, value, halted|
+          callbacks = lambda do |_obj, value, halted|
             value = !halted && (block.call if block)
             [value, halted]
           end
-          
+
           reverse_each do |callback|
             callbacks = callback.apply(callbacks)
           end
-          
+
           value, halted = *(callbacks.call(obj, value, halted))
 
           value
@@ -293,7 +295,6 @@ module MotionSupport
       def remove_duplicates(callback)
         delete_if { |c| callback.duplicates?(c) }
       end
-
     end
 
     module ClassMethods
@@ -318,11 +319,11 @@ module MotionSupport
       end
 
       def __callback_runner_name_cache
-        @__callback_runner_name_cache ||= Hash.new {|cache, kind| cache[kind] = __generate_callback_runner_name(kind) }
+        @__callback_runner_name_cache ||= Hash.new { |cache, kind| cache[kind] = __generate_callback_runner_name(kind) }
       end
 
       def __generate_callback_runner_name(kind)
-        "_run__#{self.name.hash.abs}__#{kind}__callbacks"
+        "_run__#{name.hash.abs}__#{kind}__callbacks"
       end
 
       def __callback_runner_name(kind)
@@ -336,7 +337,7 @@ module MotionSupport
         options = filters.last.is_a?(Hash) ? filters.pop : {}
         filters.unshift(block) if block
 
-        ([self] + MotionSupport::DescendantsTracker.descendants(self)).reverse.each do |target|
+        ([self] + MotionSupport::DescendantsTracker.descendants(self)).reverse_each do |target|
           chain = target.send("_#{name}_callbacks")
           yield target, chain.dup, type, filters, options
           target.__reset_runner(name)
@@ -402,7 +403,7 @@ module MotionSupport
       def skip_callback(name, *filter_list, &block)
         __update_callbacks(name, filter_list, block) do |target, chain, type, filters, options|
           filters.each do |filter|
-            filter = chain.find {|c| c.matches?(type, filter) }
+            filter = chain.detect { |c| c.matches?(type, filter) }
 
             if filter && options.any?
               new_filter = filter.clone(chain, self)
@@ -427,7 +428,7 @@ module MotionSupport
           target.__reset_runner(symbol)
         end
 
-        self.send("_#{symbol}_callbacks=", callbacks.dup.clear)
+        send("_#{symbol}_callbacks=", callbacks.dup.clear)
 
         __reset_runner(symbol)
       end

@@ -14,7 +14,7 @@ class Hash
 
   # Same as +deep_merge+, but modifies +self+.
   def deep_merge!(other_hash, &block)
-    other_hash.each_pair do |k,v|
+    other_hash.each_pair do |k, v|
       tv = self[k]
       if tv.is_a?(Hash) && v.is_a?(Hash)
         self[k] = tv.deep_merge(v, &block)

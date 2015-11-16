@@ -3,7 +3,7 @@ class Module
     receiver = self
     options = syms.extract_options!
     syms.each do |sym|
-      raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
+      raise NameError.new("invalid attribute name") unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         unless class_variable_defined?("@@#{sym}")
           class_variable_set("@@#{sym}", nil)
@@ -28,7 +28,7 @@ class Module
     receiver = self
     options = syms.extract_options!
     syms.each do |sym|
-      raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
+      raise NameError.new("invalid attribute name") unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         define_singleton_method "#{sym}=" do |obj|
           class_variable_set("@@#{sym}", obj)
