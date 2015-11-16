@@ -19,8 +19,8 @@ class Class
   #   end
   #   # => NameError: invalid attribute name
   #
-  # If you want to opt out the instance reader method, you can pass <tt>instance_reader: false</tt>
-  # or <tt>instance_accessor: false</tt>.
+  # If you want to opt out the instance reader method, you can pass
+  # <tt>instance_reader: false</tt> or <tt>instance_accessor: false</tt>.
   #
   #   class Person
   #     cattr_reader :hair_colors, instance_reader: false
@@ -30,7 +30,7 @@ class Class
   def cattr_reader(*syms)
     options = syms.extract_options!
     syms.each do |sym|
-      raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
+      raise NameError.new("invalid attribute name") unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         unless class_variable_defined?("@@#{sym}")
           class_variable_set("@@#{sym}", nil)
@@ -41,11 +41,12 @@ class Class
         end
       end
 
-      unless options[:instance_reader] == false || options[:instance_accessor] == false
-        class_exec do
-          define_method sym do
-            self.class.class_variable_get("@@#{sym}")
-          end
+      next if options[:instance_reader] == false ||
+          options[:instance_accessor] == false
+
+      class_exec do
+        define_method sym do
+          self.class.class_variable_get("@@#{sym}")
         end
       end
     end
@@ -91,7 +92,7 @@ class Class
   def cattr_writer(*syms)
     options = syms.extract_options!
     syms.each do |sym|
-      raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
+      raise NameError.new("invalid attribute name") unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         unless class_variable_defined?("@@#{sym}")
           class_variable_set("@@#{sym}", nil)

@@ -5,9 +5,9 @@ class Object
   def to_json
     attributes = {}
 
-    self.instance_variables.each do |attribute|
-      key = attribute.to_s.gsub('@', '')
-      attributes[key] = self.instance_variable_get(attribute)
+    instance_variables.each do |attribute|
+      key = attribute.to_s.delete("@")
+      attributes[key] = instance_variable_get(attribute)
     end
 
     attributes.to_json
@@ -17,21 +17,21 @@ end
 class NilClass
   # Returns 'null'.
   def to_json
-    'null'
+    "null"
   end
 end
 
 class TrueClass
   # Returns +self+ as string.
   def to_json
-    self.to_s
+    to_s
   end
 end
 
 class FalseClass
   # Returns +self+ as string.
   def to_json
-    self.to_s
+    to_s
   end
 end
 
@@ -58,9 +58,9 @@ class JSONString
       "\u2028" => '\u2028', "\u2029" => '\u2029',
       '"'  => '\"',
       '\\' => '\\\\',
-      '>' => '\u003E',
-      '<' => '\u003C',
-      '&' => '\u0026'}
+      ">" => '\u003E',
+      "<" => '\u003C',
+      "&" => '\u0026' }
 
     ESCAPE_REGEX = /[\u0000-\u001F\u2028\u2029"\\><&]/u
 
@@ -80,7 +80,7 @@ end
 class Symbol
   # Returns +self+ as string.
   def to_json
-    self.to_s
+    to_s
   end
 end
 
@@ -108,19 +108,19 @@ class Array
 
   # Calls <tt>as_json</tt> on all its elements and converts to a string.
   def to_json
-    NSJSONSerialization.dataWithJSONObject(as_json, options: 0, error: nil).to_s
+    NSJSONSerialization.dataWithJSONObject(as_json, :options => 0, :error => nil).to_s
   end
 end
 
 class Hash
   # Ensure there are valid keys/values
   def as_json
-    Hash[map { |k,v| [k.to_s, (v.respond_to?(:as_json) ? v.as_json : v)] }]
+    Hash[map { |k, v| [k.to_s, (v.respond_to?(:as_json) ? v.as_json : v)] }]
   end
 
   # Serializes the hash object using Cocoa's NSJSONSerialization
   def to_json
     # JSON keys must be strings, and any sub-objects also serialized
-    NSJSONSerialization.dataWithJSONObject(as_json, options: 0, error: nil).to_s
+    NSJSONSerialization.dataWithJSONObject(as_json, :options => 0, :error => nil).to_s
   end
 end

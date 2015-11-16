@@ -22,7 +22,7 @@ class Numeric
     when :phone
       return MotionSupport::NumberHelper.number_to_phone(self, options)
     else
-      self.to_default_s
+      to_default_s
     end
   end
 
@@ -34,7 +34,7 @@ class Numeric
         format = args[0]
         options = args[1] || {}
 
-        self.to_formatted_s(format, options)
+        to_formatted_s(format, options)
       else
         to_default_s(*args)
       end

@@ -66,8 +66,13 @@ class Class
   def class_attribute(*attrs)
     options = attrs.extract_options!
     # double assignment is used to avoid "assigned but unused variable" warning
-    instance_reader = instance_reader = options.fetch(:instance_accessor, true) && options.fetch(:instance_reader, true)
-    instance_writer = options.fetch(:instance_accessor, true) && options.fetch(:instance_writer, true)
+    has_instance_accessor = options.fetch(:instance_accessor, true)
+
+    instance_reader = instance_reader =
+      has_instance_accessor && options.fetch(:instance_reader, true)
+
+    instance_writer =
+      has_instance_accessor && options.fetch(:instance_writer, true)
 
     attrs.each do |name|
       define_singleton_method(name) { nil }
@@ -113,7 +118,8 @@ class Class
   end
 
   private
-    def singleton_class?
-      ancestors.first != self
-    end
+
+  def singleton_class?
+    ancestors.first != self
+  end
 end

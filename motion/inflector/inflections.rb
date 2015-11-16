@@ -1,4 +1,4 @@
-motion_require '../core_ext/array/prepend_and_append'
+motion_require "../core_ext/array/prepend_and_append"
 
 module MotionSupport
   module Inflector
@@ -28,12 +28,19 @@ module MotionSupport
       attr_reader :plurals, :singulars, :uncountables, :humans, :acronyms, :acronym_regex
 
       def initialize
-        @plurals, @singulars, @uncountables, @humans, @acronyms, @acronym_regex = [], [], [], [], {}, /(?=a)b/
+        @plurals = []
+        @singulars = []
+        @uncountables = []
+        @humans = []
+        @acronyms = {}
+        @acronym_regex = /(?=a)b/
       end
 
       # Private, for the test suite.
       def initialize_dup(orig) # :nodoc:
-        %w(plurals singulars uncountables humans acronyms acronym_regex).each do |scope|
+        %w(
+          plurals singulars uncountables humans acronyms acronym_regex
+        ).each do |scope|
           instance_variable_set("@#{scope}", orig.send(scope).dup)
         end
       end
@@ -130,22 +137,30 @@ module MotionSupport
         prest = plural[1..-1]
 
         if s0.upcase == p0.upcase
-          plural(/(#{s0})#{srest}$/i, '\1' + prest)
-          plural(/(#{p0})#{prest}$/i, '\1' + prest)
-
-          singular(/(#{s0})#{srest}$/i, '\1' + srest)
-          singular(/(#{p0})#{prest}$/i, '\1' + srest)
+          add_irregular_upcase_forms(s0, srest, p0, prest)
         else
-          plural(/#{s0.upcase}(?i)#{srest}$/,   p0.upcase   + prest)
-          plural(/#{s0.downcase}(?i)#{srest}$/, p0.downcase + prest)
-          plural(/#{p0.upcase}(?i)#{prest}$/,   p0.upcase   + prest)
-          plural(/#{p0.downcase}(?i)#{prest}$/, p0.downcase + prest)
-
-          singular(/#{s0.upcase}(?i)#{srest}$/,   s0.upcase   + srest)
-          singular(/#{s0.downcase}(?i)#{srest}$/, s0.downcase + srest)
-          singular(/#{p0.upcase}(?i)#{prest}$/,   s0.upcase   + srest)
-          singular(/#{p0.downcase}(?i)#{prest}$/, s0.downcase + srest)
+          add_irregular_mixed_forms(s0, srest, p0, prest)
         end
+      end
+
+      def add_irregular_upcase_forms(s0, srest, p0, prest)
+        plural(/(#{s0})#{srest}$/i, '\1' + prest)
+        plural(/(#{p0})#{prest}$/i, '\1' + prest)
+
+        singular(/(#{s0})#{srest}$/i, '\1' + srest)
+        singular(/(#{p0})#{prest}$/i, '\1' + srest)
+      end
+
+      def add_irregular_mixed_forms(s0, srest, p0, prest)
+        plural(/#{s0.upcase}(?i)#{srest}$/,   p0.upcase + prest)
+        plural(/#{s0.downcase}(?i)#{srest}$/, p0.downcase + prest)
+        plural(/#{p0.upcase}(?i)#{prest}$/,   p0.upcase + prest)
+        plural(/#{p0.downcase}(?i)#{prest}$/, p0.downcase + prest)
+
+        singular(/#{s0.upcase}(?i)#{srest}$/,   s0.upcase + srest)
+        singular(/#{s0.downcase}(?i)#{srest}$/, s0.downcase + srest)
+        singular(/#{p0.upcase}(?i)#{prest}$/,   s0.upcase + srest)
+        singular(/#{p0.downcase}(?i)#{prest}$/, s0.downcase + srest)
       end
 
       # Add uncountable words that shouldn't be attempted inflected.
@@ -178,10 +193,13 @@ module MotionSupport
       #   clear :plurals
       def clear(scope = :all)
         case scope
-          when :all
-            @plurals, @singulars, @uncountables, @humans = [], [], [], []
-          else
-            instance_variable_set "@#{scope}", []
+        when :all
+          @plurals = []
+          @singulars = []
+          @uncountables = []
+          @humans = []
+        else
+          instance_variable_set "@#{scope}", []
         end
       end
     end
@@ -193,11 +211,9 @@ module MotionSupport
     #     inflect.uncountable 'rails'
     #   end
     def inflections
-      if block_given?
-        yield Inflections.instance
-      else
-        Inflections.instance
-      end
+      yield Inflections.instance if block_given?
+
+      Inflections.instance
     end
   end
 end

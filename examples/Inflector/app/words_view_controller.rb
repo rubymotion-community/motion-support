@@ -1,3 +1,4 @@
+# rubocop:disable Style/MethodName, Lint/UnusedMethodArgument, Lint/DuplicateMethods
 class WordsViewController < UITableViewController
   WORDS = [
     [
@@ -61,41 +62,43 @@ class WordsViewController < UITableViewController
       }
     ]
   ]
-  
+
   def initWithParent(parent)
     @parent = parent
-    
+
     self.title = "Select word"
-    
+
     self
   end
-  
-  def numberOfSectionsInTableView(tableView)
+
+  def numberOfSectionsInTableView(_tableView)
     WORDS.size
   end
-  
-  def tableView(tableView, titleForHeaderInSection:section)
+
+  def tableView(_tableView, titleForHeaderInSection:section)
     WORDS[section].first
   end
-  
-  def tableView(tableView, numberOfRowsInSection:section)
+
+  def tableView(_tableView, numberOfRowsInSection:section)
     WORDS[section].last.size
   end
 
-  def tableView(tableView, cellForRowAtIndexPath:indexPath)
+  def tableView(_tableView, cellForRowAtIndexPath:indexPath)
     fresh_cell.tap do |cell|
       cell.textLabel.text = WORDS[indexPath.section].last[indexPath.row]
     end
   end
-  
-  def tableView(tableView, didSelectRowAtIndexPath:indexPath)
+
+  def tableView(_tableView, didSelectRowAtIndexPath:indexPath)
     @parent.set_word(WORDS[indexPath.section].last[indexPath.row])
     navigationController.popViewControllerAnimated(true)
   end
-  
-private
+
+  private
+
   def fresh_cell
-    tableView.dequeueReusableCellWithIdentifier('Cell') ||
-    UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:'Cell')
+    tableView.dequeueReusableCellWithIdentifier("Cell") ||
+      UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, :reuseIdentifier => "Cell")
   end
 end
+# rubocop:enable Style/MethodName, Lint/UnusedMethodArgument, Lint/DuplicateMethods

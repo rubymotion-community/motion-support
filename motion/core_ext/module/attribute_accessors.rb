@@ -3,7 +3,7 @@ class Module
     receiver = self
     options = syms.extract_options!
     syms.each do |sym|
-      raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
+      raise NameError.new("invalid attribute name") unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         unless class_variable_defined?("@@#{sym}")
           class_variable_set("@@#{sym}", nil)
@@ -14,11 +14,12 @@ class Module
         end
       end
 
-      unless options[:instance_reader] == false || options[:instance_accessor] == false
-        class_exec do
-          define_method sym do
-            receiver.class_variable_get("@@#{sym}")
-          end
+      next if options[:instance_reader] == false ||
+          options[:instance_accessor] == false
+
+      class_exec do
+        define_method sym do
+          receiver.class_variable_get("@@#{sym}")
         end
       end
     end
@@ -28,18 +29,19 @@ class Module
     receiver = self
     options = syms.extract_options!
     syms.each do |sym|
-      raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
+      raise NameError.new("invalid attribute name") unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         define_singleton_method "#{sym}=" do |obj|
           class_variable_set("@@#{sym}", obj)
         end
       end
 
-      unless options[:instance_writer] == false || options[:instance_accessor] == false
-        class_exec do
-          define_method "#{sym}=" do |obj|
-            receiver.class_variable_set("@@#{sym}", obj)
-          end
+      next if options[:instance_writer] == false ||
+          options[:instance_accessor] == false
+
+      class_exec do
+        define_method "#{sym}=" do |obj|
+          receiver.class_variable_set("@@#{sym}", obj)
         end
       end
     end

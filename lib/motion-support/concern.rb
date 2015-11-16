@@ -1,4 +1,4 @@
-require 'motion-require'
+require "motion-require"
 
 files = [
   "concern"

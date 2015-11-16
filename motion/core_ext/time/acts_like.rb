@@ -1,4 +1,4 @@
-motion_require '../object/acts_like'
+motion_require "../object/acts_like"
 
 class Time
   # Duck-types as a Time-like class. See Object#acts_like?.

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 $:.unshift("/Library/RubyMotion/lib")
-require 'motion/project'
-require 'bundler'
+require "motion/project"
+require "bundler"
 Bundler.require
 
-require '../../lib/motion-support/inflector'
+require "../../lib/motion-support/inflector"
 
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
-  app.name = 'Inflector'
+  app.name = "Inflector"
   app.detect_dependencies = false
 end

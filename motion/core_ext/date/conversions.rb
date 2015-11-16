@@ -1,14 +1,14 @@
 class Date
   DATE_FORMATS = {
-    :short        => '%e %b',
-    :long         => '%B %e, %Y',
-    :db           => '%Y-%m-%d',
-    :number       => '%Y%m%d',
-    :long_ordinal => lambda { |date|
+    :short        => "%e %b",
+    :long         => "%B %e, %Y",
+    :db           => "%Y-%m-%d",
+    :number       => "%Y%m%d",
+    :long_ordinal => lambda do |date|
       day_format = MotionSupport::Inflector.ordinalize(date.day)
       date.strftime("%B #{day_format}, %Y") # => "April 25th, 2007"
-    },
-    :rfc822       => '%e %b %Y'
+    end,
+    :rfc822 => "%e %b %Y"
   }
 
   # Convert to a formatted string. See DATE_FORMATS for predefined formats.
@@ -49,7 +49,7 @@ class Date
 
   # Overrides the default inspect method with a human readable one, e.g., "Mon, 21 Feb 2005"
   def readable_inspect
-    strftime('%a, %d %b %Y')
+    strftime("%a, %d %b %Y")
   end
   alias_method :default_inspect, :inspect
   alias_method :inspect, :readable_inspect

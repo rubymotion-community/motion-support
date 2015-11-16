@@ -21,8 +21,10 @@ class Module
   #     delegate :hello, to: :greeter
   #   end
   #
-  #   Foo.new.hello   # => "hello"
-  #   Foo.new.goodbye # => NoMethodError: undefined method `goodbye' for #<Foo:0x1af30c>
+  #   Foo.new.hello
+  #     => "hello"
+  #   Foo.new.goodbye
+  #     => NoMethodError: undefined method `goodbye' for #<Foo:0x1af30c>
   #
   # Multiple delegates to the same target are allowed:
   #
@@ -64,9 +66,9 @@ class Module
   #
   #   Foo.new.hello # => "world"
   #
-  # Delegates can optionally be prefixed using the <tt>:prefix</tt> option. If the value
-  # is <tt>true</tt>, the delegate methods are prefixed with the name of the object being
-  # delegated to.
+  # Delegates can optionally be prefixed using the <tt>:prefix</tt> option. If
+  # the value is <tt>true</tt>, the delegate methods are prefixed with the name
+  # of the object being delegated to.
   #
   #   Person = Struct.new(:name, :address)
   #
@@ -115,38 +117,54 @@ class Module
   def delegate(*methods)
     options = methods.pop
     unless options.is_a?(Hash) && to = options[:to]
-      raise ArgumentError, 'Delegation needs a target. Supply an options hash with a :to key as the last argument (e.g. delegate :hello, to: :greeter).'
+      raise ArgumentError, "Delegation needs a target. Supply an options hash" \
+        " with a :to key as the last argument (e.g. delegate :hello, to: " \
+        ":greeter)."
     end
 
     prefix, allow_nil = options.values_at(:prefix, :allow_nil)
     unguarded = !allow_nil
 
     if prefix == true && to =~ /^[^a-z_]/
-      raise ArgumentError, 'Can only automatically set the delegation prefix when delegating to a method.'
+      raise ArgumentError, "Can only automatically set the delegation prefix " \
+        "when delegating to a method."
     end
 
-    method_prefix = \
+    method_prefix =
       if prefix
         "#{prefix == true ? to : prefix}_"
       else
-        ''
+        ""
       end
 
-    reference, *hierarchy = to.to_s.split('.')
+    reference, *hierarchy = to.to_s.split(".")
     entry = resolver =
       case reference
-      when 'self'
-        ->(_self) { _self }
+      when "self"
+        -> (self_ref) { self_ref }
       when /^@@/
-        ->(_self) { _self.class.class_variable_get(reference) }
+        -> (self_ref) { self_ref.class.class_variable_get(reference) }
       when /^@/
-        ->(_self) { _self.instance_variable_get(reference) }
+        -> (self_ref) { self_ref.instance_variable_get(reference) }
       when /^[A-Z]/
-        ->(_self) { if reference.to_s =~ /::/ then reference.constantize else _self.class.const_get(reference) end }
+        lambda do |self_ref|
+          if reference.to_s =~ /::/
+            reference.constantize
+          else
+            self_ref.class.const_get(reference)
+          end
+        end
       else
-        ->(_self) { _self.send(reference) }
+        -> (self_ref) { self_ref.send(reference) }
       end
-    resolver = ->(_self) { hierarchy.reduce(entry.call(_self)) { |obj, method| obj.public_send(method) } } unless hierarchy.empty?
+
+    unless hierarchy.empty?
+      resolver = lambda do |self_ref|
+        hierarchy.inject(entry.call(self_ref)) do |obj, method|
+          obj.public_send(method)
+        end
+      end
+    end
 
     methods.each do |method|
       module_exec do
@@ -164,8 +182,10 @@ class Module
           if unguarded || target || target.respond_to?(method)
             begin
               target.public_send(method, *args, &block)
-            rescue target.nil? && NoMethodError # only rescue NoMethodError when target is nil
-              raise "#{self}##{method_prefix}#{method} delegated to #{to}.#{method}, but #{to} is nil: #{self.inspect}"
+            # only rescue NoMethodError when target is nil
+            rescue target.nil? && NoMethodError
+              raise "#{self}##{method_prefix}#{method} delegated to #{to}." \
+                "#{method}, but #{to} is nil: #{inspect}"
             end
           end
         end

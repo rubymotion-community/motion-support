@@ -1,3 +1,3 @@
-require 'motion-require'
+require "motion-require"
 
-Motion::Require.all(Dir.glob(File.expand_path('../../motion/**/*.rb', __FILE__)))
+Motion::Require.all(Dir.glob(File.expand_path("../../motion/**/*.rb", __FILE__)))

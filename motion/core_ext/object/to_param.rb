@@ -30,7 +30,7 @@ class Array
   # Calls <tt>to_param</tt> on all its elements and joins the result with
   # slashes. This is used by <tt>url_for</tt> in Action Pack.
   def to_param
-    collect { |e| e.to_param }.join '/'
+    map(&:to_param).join "/"
   end
 end
 
@@ -51,8 +51,8 @@ class Hash
   #
   # This method is also aliased as +to_query+.
   def to_param(namespace = nil)
-    collect do |key, value|
+    map do |key, value|
       value.to_query(namespace ? "#{namespace}[#{key}]" : key)
-    end.sort * '&'
+    end.sort * "&"
   end
 end
