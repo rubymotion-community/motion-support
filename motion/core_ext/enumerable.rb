@@ -3,9 +3,7 @@ module Enumerable
   def collect_with_index(&block)
     index = 0
     map do |value|
-      block.call(value, index).tap do
-        index += 1
-      end
+      block.call(value, index).tap { index += 1 }
     end
   end
 
@@ -28,11 +26,9 @@ module Enumerable
   #
   #  [].sum(Payment.new(0)) { |i| i.amount } # => Payment.new(0)
   def sum(identity = 0, &block)
-    if block_given?
-      map(&block).sum(identity)
-    else
-      inject { |sum, element| sum + element } || identity
-    end
+    return map(&block).sum(identity) if block_given?
+
+    inject { |sum, element| sum + element } || identity
   end
 
   # Convert an enumerable to a hash.
@@ -40,13 +36,15 @@ module Enumerable
   #   people.index_by(&:login)
   #     => { "nextangle" => <Person ...>, "chade-" => <Person ...>, ...}
   #   people.index_by { |person| "#{person.first_name} #{person.last_name}" }
-  #     => { "Chade- Fowlersburg-e" => <Person ...>, "David Heinemeier Hansson" => <Person ...>, ...}
+  #     => {
+  #          "Chade- Fowlersburg-e" => <Person ...>,
+  #          "David Heinemeier Hansson" => <Person ...>,
+  #          ...
+  #        }
   def index_by
-    if block_given?
-      Hash[map { |elem| [yield(elem), elem] }]
-    else
-      to_enum :index_by
-    end
+    return Hash[map { |elem| [yield(elem), elem] }] if block_given?
+
+    to_enum :index_by
   end
 
   # Returns +true+ if the enumerable has more than 1 element. Functionally
@@ -55,13 +53,11 @@ module Enumerable
   # if more than one person is over 26.
   def many?
     cnt = 0
-    if block_given?
-      any? do |element|
-        cnt += 1 if yield element
-        cnt > 1
-      end
-    else
-      any? { (cnt += 1) > 1 }
+    return any? { (cnt += 1) > 1 } unless block_given?
+
+    any? do |element|
+      cnt += 1 if yield element
+      cnt > 1
     end
   end
 
@@ -76,15 +72,12 @@ class Range #:nodoc:
   # Optimize range sum to use arithmetic progression if a block is not given and
   # we have a range of numeric values.
   def sum(identity = 0)
-    if block_given? || !(first.is_a?(Integer) && last.is_a?(Integer))
-      super
-    else
-      actual_last = exclude_end? ? (last - 1) : last
-      if actual_last >= first
-        (actual_last - first + 1) * (actual_last + first) / 2
-      else
-        identity
-      end
-    end
+    return super if block_given? || !(first.is_a?(Integer) && last.is_a?(Integer))
+
+    actual_last = exclude_end? ? (last - 1) : last
+
+    return identity unless actual_last >= first
+
+    (actual_last - first + 1) * (actual_last + first) / 2
   end
 end

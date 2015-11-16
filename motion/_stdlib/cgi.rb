@@ -5,8 +5,10 @@ class CGI
   #   url_encoded_string = CGI::escape("'Stop!' said Fred")
   #      # => "%27Stop%21%27+said+Fred"
   def self::escape(string)
-    string.gsub(/([^ a-zA-Z0-9_.-]+)/) do
-      "%" + $1.unpack("H2" * $1.bytesize).join("%").upcase
+    string.gsub(/([^ a-zA-Z0-9_.-]+)/) do |special_character|
+      "%" + special_character.unpack("H2" * special_character.bytesize)
+        .join("%")
+        .upcase
     end.tr(" ", "+")
   end
 
@@ -14,9 +16,11 @@ class CGI
   #   string = CGI::unescape("%27Stop%21%27+said+Fred")
   #      # => "'Stop!' said Fred"
   def self::unescape(string, encoding = @@accept_charset)
-    str = string.tr("+", " ").force_encoding(Encoding::ASCII_8BIT).gsub(/((?:%[0-9a-fA-F]{2})+)/) do
-      [$1.delete("%")].pack("H*")
-    end.force_encoding(encoding)
+    str = string.tr("+", " ")
+      .force_encoding(Encoding::ASCII_8BIT)
+      .gsub(/((?:%[0-9a-fA-F]{2})+)/) do |encoded_character|
+        [encoded_character.delete("%")].pack("H*")
+      end.force_encoding(encoding)
     str.valid_encoding? ? str : str.force_encoding(string.encoding)
   end
 end

@@ -9,6 +9,10 @@ files = [
   "core_ext/module/attr_internal",
   "core_ext/module/delegation",
   "core_ext/module/remove_method"
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
+].map do |file|
+  File.expand_path(
+    File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")
+  )
+end
 
 Motion::Require.all(files)

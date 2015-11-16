@@ -101,7 +101,9 @@ class InflectorViewController < Formotion::FormController
                                         }]
                                       }])
     @form.row(:select).on_tap do
-      navigationController.pushViewController(WordsViewController.alloc.initWithParent(self), :animated => true)
+      navigationController.pushViewController(
+        WordsViewController.alloc.initWithParent(self), :animated => true
+      )
     end
     @form
   end

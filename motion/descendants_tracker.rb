@@ -30,7 +30,9 @@ module MotionSupport
       def accumulate_descendants(klass, acc)
         if direct_descendants = @@direct_descendants[klass]
           acc.concat(direct_descendants)
-          direct_descendants.each { |direct_descendant| accumulate_descendants(direct_descendant, acc) }
+          direct_descendants.each do |direct_descendant|
+            accumulate_descendants(direct_descendant, acc)
+          end
         end
       end
     end

@@ -9,11 +9,9 @@ class Time
     # Return the number of days in the given month.
     # If no year is specified, it will use the current year.
     def days_in_month(month, year = now.year)
-      if month == 2 && ::Date.gregorian_leap?(year)
-        29
-      else
-        COMMON_YEAR_DAYS_IN_MONTH[month]
-      end
+      return 29 if month == 2 && ::Date.gregorian_leap?(year)
+
+      COMMON_YEAR_DAYS_IN_MONTH[month]
     end
 
     # Alias for <tt>Time.now</tt>.
@@ -44,9 +42,12 @@ class Time
   # keys: <tt>:year</tt>, <tt>:month</tt>, <tt>:day</tt>, <tt>:hour</tt>, <tt>:min</tt>,
   # <tt>:sec</tt>, <tt>:usec</tt>.
   #
-  #   Time.new(2012, 8, 29, 22, 35, 0).change(day: 1)              # => Time.new(2012, 8, 1, 22, 35, 0)
-  #   Time.new(2012, 8, 29, 22, 35, 0).change(year: 1981, day: 1)  # => Time.new(1981, 8, 1, 22, 35, 0)
-  #   Time.new(2012, 8, 29, 22, 35, 0).change(year: 1981, hour: 0) # => Time.new(1981, 8, 29, 0, 0, 0)
+  #   Time.new(2012, 8, 29, 22, 35, 0).change(day: 1)
+  #     => Time.new(2012, 8, 1, 22, 35, 0)
+  #   Time.new(2012, 8, 29, 22, 35, 0).change(year: 1981, day: 1)
+  #     => Time.new(1981, 8, 1, 22, 35, 0)
+  #   Time.new(2012, 8, 29, 22, 35, 0).change(year: 1981, hour: 0)
+  #     => Time.new(1981, 8, 29, 0, 0, 0)
   def change(options)
     new_year  = options.fetch(:year, year)
     new_month = options.fetch(:month, month)
@@ -54,14 +55,16 @@ class Time
     new_hour  = options.fetch(:hour, hour)
     new_min   = options.fetch(:min, options[:hour] ? 0 : min)
     new_sec   = options.fetch(:sec, (options[:hour] || options[:min]) ? 0 : sec)
-    new_usec  = options.fetch(:usec, (options[:hour] || options[:min] || options[:sec]) ? 0 : Rational(nsec, 1000))
+    has_other_options = options[:hour] || options[:min] || options[:sec]
+    new_usec = options.fetch(:usec, has_other_options ? 0 : Rational(nsec, 1000))
 
     if utc?
       ::Time.utc(new_year, new_month, new_day, new_hour, new_min, new_sec, new_usec)
     elsif zone
       ::Time.local(new_year, new_month, new_day, new_hour, new_min, new_sec, new_usec)
     else
-      ::Time.new(new_year, new_month, new_day, new_hour, new_min, new_sec + (new_usec.to_r / 1_000_000), utc_offset)
+      ::Time.new(new_year, new_month, new_day, new_hour, new_min,
+                 new_sec + (new_usec.to_r / 1_000_000), utc_offset)
     end
   end
 
@@ -87,19 +90,19 @@ class Time
         options.fetch(:minutes, 0) * 60 +
         options.fetch(:hours, 0) * 3600
 
-    if seconds_to_advance.zero?
-      time_advanced_by_date
-    else
-      time_advanced_by_date.since(seconds_to_advance)
-    end
+    return time_advanced_by_date if seconds_to_advance.zero?
+
+    time_advanced_by_date.since(seconds_to_advance)
   end
 
-  # Returns a new Time representing the time a number of seconds ago, this is basically a wrapper around the Numeric extension
+  # Returns a new Time representing the time a number of seconds ago, this is
+  # basically a wrapper around the Numeric extension
   def ago(seconds)
     since(-seconds)
   end
 
-  # Returns a new Time representing the time a number of seconds since the instance time
+  # Returns a new Time representing the time a number of seconds since the
+  # instance time
   def since(seconds)
     self + seconds
   rescue
@@ -116,7 +119,8 @@ class Time
   alias :at_midnight :beginning_of_day
   alias :at_beginning_of_day :beginning_of_day
 
-  # Returns a new Time representing the end of the day, 23:59:59.999999 (.999999999 in ruby1.9)
+  # Returns a new Time representing the end of the day, 23:59:59.999999
+  # (.999999999 in ruby1.9)
   def end_of_day
     change(
       :hour => 23,
@@ -133,7 +137,8 @@ class Time
   end
   alias :at_beginning_of_hour :beginning_of_hour
 
-  # Returns a new Time representing the end of the hour, x:59:59.999999 (.999999999 in ruby1.9)
+  # Returns a new Time representing the end of the hour, x:59:59.999999
+  # (.999999999 in ruby1.9)
   def end_of_hour
     change(
       :min => 59,
@@ -149,7 +154,8 @@ class Time
   end
   alias :at_beginning_of_minute :beginning_of_minute
 
-  # Returns a new Time representing the end of the minute, x:xx:59.999999 (.999999999 in ruby1.9)
+  # Returns a new Time representing the end of the minute, x:xx:59.999999
+  # (.999999999 in ruby1.9)
   def end_of_minute
     change(
       :sec => 59,
@@ -164,7 +170,8 @@ class Time
   end
 
   # Returns a Range representing the whole week of the current time.
-  # Week starts on start_day, default is <tt>Date.week_start</tt> or <tt>config.week_start</tt> when set.
+  # Week starts on start_day, default is <tt>Date.week_start</tt> or
+  # <tt>config.week_start</tt> when set.
   def all_week(start_day = Date.beginning_of_week)
     beginning_of_week(start_day)..end_of_week(start_day)
   end
@@ -185,7 +192,8 @@ class Time
   end
 
   def plus_with_duration(other) #:nodoc:
-    if MotionSupport::Duration === other
+    case other
+    when MotionSupport::Duration
       other.since(self)
     else
       plus_without_duration(other)
@@ -195,7 +203,8 @@ class Time
   alias_method :+, :plus_with_duration
 
   def minus_with_duration(other) #:nodoc:
-    if MotionSupport::Duration === other
+    case other
+    when MotionSupport::Duration
       other.until(self)
     else
       minus_without_duration(other)

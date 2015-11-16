@@ -26,10 +26,17 @@ class Array
   #   ['one', 'two'].to_sentence(two_words_connector: '-')
   #   # => "one-two"
   #
-  #   ['one', 'two', 'three'].to_sentence(words_connector: ' or ', last_word_connector: ' or at least ')
+  #   ['one', 'two', 'three'].to_sentence(
+  #     words_connector: ' or ',
+  #     last_word_connector: ' or at least '
+  #   )
   #   # => "one or two or at least three"
   def to_sentence(options = {})
-    options.assert_valid_keys(:words_connector, :two_words_connector, :last_word_connector)
+    options.assert_valid_keys(
+      :words_connector,
+      :two_words_connector,
+      :last_word_connector
+    )
 
     default_connectors = {
       :words_connector     => ", ",
@@ -46,7 +53,8 @@ class Array
     when 2
       "#{self[0]}#{options[:two_words_connector]}#{self[1]}"
     else
-      "#{self[0...-1].join(options[:words_connector])}#{options[:last_word_connector]}#{self[-1]}"
+      "#{self[0...-1].join(options[:words_connector])}" \
+      "#{options[:last_word_connector]}#{self[-1]}"
     end
   end
 

@@ -121,8 +121,8 @@ module MotionSupport
         @@_callback_sequence += 1
       end
 
-      def matches?(_kind, _filter)
-        @kind == _kind && @raw_filter == _filter
+      def matches?(given_kind, given_filter)
+        @kind == given_kind && @raw_filter == given_filter
       end
 
       def duplicates?(other)
@@ -130,12 +130,16 @@ module MotionSupport
       end
 
       def _update_filter(filter_options, new_options)
-        filter_options[:if].concat(Array(new_options[:unless])) if new_options.key?(:unless)
-        filter_options[:unless].concat(Array(new_options[:if])) if new_options.key?(:if)
+        if new_options.key?(:unless)
+          filter_options[:if].concat(Array(new_options[:unless]))
+        end
+        if new_options.key?(:if)
+          filter_options[:unless].concat(Array(new_options[:if]))
+        end
       end
 
-      def recompile!(_options)
-        _update_filter(options, _options)
+      def recompile!(given_options)
+        _update_filter(options, given_options)
 
         recompile_options!
       end
@@ -156,7 +160,8 @@ module MotionSupport
         when :after
           lambda do |obj, value, halted|
             value, halted = *(code.call(obj, value, halted))
-            if (!chain.config[:skip_after_callbacks_if_terminated] || !halted) && @compiled_options.call(obj)
+            if (!chain.config[:skip_after_callbacks_if_terminated] || !halted) &&
+                @compiled_options.call(obj)
               @filter.call(obj)
             end
             [value, halted]
@@ -190,7 +195,9 @@ module MotionSupport
         end
 
         unless options[:unless].empty?
-          @conditions << Array(_compile_filter(options[:unless])).map { |f| ->(obj) { !f.call(obj) } }
+          @conditions << Array(_compile_filter(options[:unless])).map do |f|
+            ->(obj) { !f.call(obj) }
+          end
         end
 
         @compiled_options = ->(obj) { @conditions.flatten.all? { |c| c.call(obj) } }
@@ -319,7 +326,9 @@ module MotionSupport
       end
 
       def __callback_runner_name_cache
-        @__callback_runner_name_cache ||= Hash.new { |cache, kind| cache[kind] = __generate_callback_runner_name(kind) }
+        @__callback_runner_name_cache ||= Hash.new do |cache, kind|
+          cache[kind] = __generate_callback_runner_name(kind)
+        end
       end
 
       def __generate_callback_runner_name(kind)

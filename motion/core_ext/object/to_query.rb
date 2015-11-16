@@ -1,10 +1,11 @@
 motion_require "to_param"
 
 class Object
-  # Converts an object into a string suitable for use as a URL query string, using the given <tt>key</tt> as the
-  # param name.
+  # Converts an object into a string suitable for use as a URL query string,
+  # using the given <tt>key</tt> as the param name.
   #
-  # Note: This method is defined as a default implementation for all Objects for Hash#to_query to work.
+  # Note: This method is defined as a default implementation for all Objects for
+  # Hash#to_query to work.
   def to_query(key)
     "#{CGI.escape(key.to_param)}=#{CGI.escape(to_param.to_s)}"
   end
@@ -14,7 +15,8 @@ class Array
   # Converts an array into a string suitable for use as a URL query string,
   # using the given +key+ as the param name.
   #
-  #   ['Rails', 'coding'].to_query('hobbies') # => "hobbies%5B%5D=Rails&hobbies%5B%5D=coding"
+  #   ['Rails', 'coding'].to_query('hobbies')
+  #     => "hobbies%5B%5D=Rails&hobbies%5B%5D=coding"
   def to_query(key)
     prefix = "#{key}[]"
     map { |value| value.to_query(prefix) }.join "&"

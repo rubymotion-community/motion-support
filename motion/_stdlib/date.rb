@@ -48,17 +48,17 @@ class Date
     end
   end
 
-  def >>(months)
-    new_year = year + (month + months - 1) / 12
-    new_month = (month + months) % 12
+  def >>(other)
+    new_year = year + (month + other - 1) / 12
+    new_month = (month + other) % 12
     new_month = new_month == 0 ? 12 : new_month
     new_day = [day, Time.days_in_month(new_month, new_year)].min
 
     Date.new(new_year, new_month, new_day)
   end
 
-  def <<(months)
-    self >> -months
+  def <<(other)
+    self >> -other
   end
 
   [:year, :month, :day, :wday, :<, :<=, :>, :>=, :"<=>", :strftime].each do |method|

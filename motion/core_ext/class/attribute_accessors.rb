@@ -19,8 +19,8 @@ class Class
   #   end
   #   # => NameError: invalid attribute name
   #
-  # If you want to opt out the instance reader method, you can pass <tt>instance_reader: false</tt>
-  # or <tt>instance_accessor: false</tt>.
+  # If you want to opt out the instance reader method, you can pass
+  # <tt>instance_reader: false</tt> or <tt>instance_accessor: false</tt>.
   #
   #   class Person
   #     cattr_reader :hair_colors, instance_reader: false
@@ -41,11 +41,12 @@ class Class
         end
       end
 
-      unless options[:instance_reader] == false || options[:instance_accessor] == false
-        class_exec do
-          define_method sym do
-            self.class.class_variable_get("@@#{sym}")
-          end
+      next if options[:instance_reader] == false ||
+          options[:instance_accessor] == false
+
+      class_exec do
+        define_method sym do
+          self.class.class_variable_get("@@#{sym}")
         end
       end
     end

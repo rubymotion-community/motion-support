@@ -1,4 +1,5 @@
-# String inflections define new methods on the String class to transform names for different purposes.
+# String inflections define new methods on the String class to transform names
+# for different purposes.
 # For instance, you can figure out the name of a table from the name of a class.
 #
 #   'ScaleScore'.tableize # => "scale_scores"
@@ -60,10 +61,11 @@ class String
     MotionSupport::Inflector.safe_constantize(self)
   end
 
-  # By default, +camelize+ converts strings to UpperCamelCase. If the argument to camelize
-  # is set to <tt>:lower</tt> then camelize produces lowerCamelCase.
+  # By default, +camelize+ converts strings to UpperCamelCase. If the argument
+  # to camelize is set to <tt>:lower</tt> then camelize produces lowerCamelCase.
   #
-  # +camelize+ will also convert '/' to '::' which is useful for converting paths to namespaces.
+  # +camelize+ will also convert '/' to '::' which is useful for converting
+  # paths to namespaces.
   #
   #   'active_record'.camelize                # => "ActiveRecord"
   #   'active_record'.camelize(:lower)        # => "activeRecord"
@@ -92,7 +94,8 @@ class String
   end
   alias_method :titlecase, :titleize
 
-  # The reverse of +camelize+. Makes an underscored, lowercase form from the expression in the string.
+  # The reverse of +camelize+. Makes an underscored, lowercase form from the
+  # expression in the string.
   #
   # +underscore+ will also change '::' to '/' to convert namespaces to paths.
   #
@@ -111,8 +114,10 @@ class String
 
   # Removes the module part from the constant expression in the string.
   #
-  #   'ActiveRecord::CoreExtensions::String::Inflections'.demodulize # => "Inflections"
-  #   'Inflections'.demodulize                                       # => "Inflections"
+  #   'ActiveRecord::CoreExtensions::String::Inflections'.demodulize
+  #     => "Inflections"
+  #   'Inflections'.demodulize
+  #     => "Inflections"
   #
   # See also +deconstantize+.
   def demodulize
@@ -132,8 +137,8 @@ class String
     MotionSupport::Inflector.deconstantize(self)
   end
 
-  # Creates the name of a table like Rails does for models to table names. This method
-  # uses the +pluralize+ method on the last word in the string.
+  # Creates the name of a table like Rails does for models to table names. This
+  # method uses the +pluralize+ method on the last word in the string.
   #
   #   'RawScaledScorer'.tableize # => "raw_scaled_scorers"
   #   'egg_and_ham'.tableize     # => "egg_and_hams"
@@ -142,9 +147,10 @@ class String
     MotionSupport::Inflector.tableize(self)
   end
 
-  # Create a class name from a plural table name like Rails does for table names to models.
-  # Note that this returns a string and not a class. (To convert to an actual class
-  # follow +classify+ with +constantize+.)
+  # Create a class name from a plural table name like Rails does for table names
+  # to models.
+  # Note that this returns a string and not a class. (To convert to an actual
+  # class follow +classify+ with +constantize+.)
   #
   #   'egg_and_hams'.classify # => "EggAndHam"
   #   'posts'.classify        # => "Post"
@@ -173,6 +179,8 @@ class String
   #   'Message'.foreign_key(false) # => "messageid"
   #   'Admin::Post'.foreign_key    # => "post_id"
   def foreign_key(separate_class_name_and_id_with_underscore = true)
-    MotionSupport::Inflector.foreign_key(self, separate_class_name_and_id_with_underscore)
+    MotionSupport::Inflector.foreign_key(
+      self, separate_class_name_and_id_with_underscore
+    )
   end
 end

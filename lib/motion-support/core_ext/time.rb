@@ -14,6 +14,10 @@ files = [
   "core_ext/numeric/time",
   "core_ext/object/acts_like",
   "duration"
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
+].map do |file|
+  File.expand_path(
+    File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")
+  )
+end
 
 Motion::Require.all(files)

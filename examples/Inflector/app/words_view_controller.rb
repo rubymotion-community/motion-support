@@ -1,3 +1,4 @@
+# rubocop:disable Style/MethodName, Lint/UnusedMethodArgument, Lint/DuplicateMethods
 class WordsViewController < UITableViewController
   WORDS = [
     [
@@ -100,3 +101,4 @@ class WordsViewController < UITableViewController
       UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, :reuseIdentifier => "Cell")
   end
 end
+# rubocop:enable Style/MethodName, Lint/UnusedMethodArgument, Lint/DuplicateMethods

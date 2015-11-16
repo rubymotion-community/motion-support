@@ -87,7 +87,7 @@ class String
   #
   #   ''.blank?                 # => true
   #   '   '.blank?              # => true
-  #   '　'.blank?               # => true
+  #   "\t".blank?               # => true
   #   ' something here '.blank? # => false
   def blank?
     self !~ /[^[:space:]]/

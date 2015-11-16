@@ -62,9 +62,12 @@ class Module
   #   e.title    # => "Megastars"
   def alias_attribute(new_name, old_name)
     module_exec do
-      define_method(new_name) { send(old_name) } # def subject; self.title; end
-      define_method("#{new_name}?") { send("#{old_name}?") } # def subject?; self.title?; end
-      define_method("#{new_name}=") { |v| send("#{old_name}=", v) } # def subject=(v); self.title = v; end
+      # def subject; self.title; end
+      define_method(new_name) { send(old_name) }
+      # def subject?; self.title?; end
+      define_method("#{new_name}?") { send("#{old_name}?") }
+      # def subject=(v); self.title = v; end
+      define_method("#{new_name}=") { |v| send("#{old_name}=", v) }
     end
   end
 end

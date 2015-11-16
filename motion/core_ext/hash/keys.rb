@@ -7,18 +7,14 @@ class Hash
   #  # => { "NAME" => "Rob", "AGE" => "28" }
   def transform_keys
     result = {}
-    each_key do |key|
-      result[yield(key)] = self[key]
-    end
+    each_key { |key| result[yield(key)] = self[key] }
     result
   end
 
   # Destructively convert all keys using the block operations.
   # Same as transform_keys but modifies +self+.
   def transform_keys!
-    keys.each do |key|
-      self[yield(key)] = delete(key)
-    end
+    keys.each { |key| self[yield(key)] = delete(key) }
     self
   end
 
@@ -46,26 +42,14 @@ class Hash
   #   hash.symbolize_keys
   #   #=> { name: "Rob", age: "28" }
   def symbolize_keys
-    transform_keys do |key|
-      begin
-                            key.to_sym
-                          rescue
-                            key
-                          end
-    end
+    transform_keys { |key| key.to_sym rescue key }
   end
   alias_method :to_options, :symbolize_keys
 
   # Destructively convert all keys to symbols, as long as they respond
   # to +to_sym+. Same as +symbolize_keys+, but modifies +self+.
   def symbolize_keys!
-    transform_keys! do |key|
-      begin
-                             key.to_sym
-                           rescue
-                             key
-                           end
-    end
+    transform_keys! { |key| key.to_sym rescue key }
   end
   alias_method :to_options!, :symbolize_keys!
 
@@ -73,13 +57,17 @@ class Hash
   # on a mismatch. Note that keys are NOT treated indifferently, meaning if you
   # use strings for keys but assert symbols as keys, this will fail.
   #
-  #   { name: 'Rob', years: '28' }.assert_valid_keys(:name, :age) # => raises "ArgumentError: Unknown key: years"
-  #   { name: 'Rob', age: '28' }.assert_valid_keys('name', 'age') # => raises "ArgumentError: Unknown key: name"
-  #   { name: 'Rob', age: '28' }.assert_valid_keys(:name, :age)   # => passes, raises nothing
+  #   { name: 'Rob', years: '28' }.assert_valid_keys(:name, :age)
+  #     => raises "ArgumentError: Unknown key: years"
+  #   { name: 'Rob', age: '28' }.assert_valid_keys('name', 'age')
+  #     => raises "ArgumentError: Unknown key: name"
+  #   { name: 'Rob', age: '28' }.assert_valid_keys(:name, :age)
+  #     => passes, raises nothing
   def assert_valid_keys(*valid_keys)
     valid_keys.flatten!
     each_key do |k|
-      raise ArgumentError.new("Unknown key: #{k}") unless valid_keys.include?(k)
+      return if valid_keys.include?(k)
+      raise ArgumentError.new("Unknown key: #{k}")
     end
   end
 
@@ -94,13 +82,14 @@ class Hash
   def deep_transform_keys(&block)
     result = {}
     each do |key, value|
-      result[yield(key)] = if value.is_a?(Hash)
-                             value.deep_transform_keys(&block)
-                           elsif value.is_a?(Array)
-                             value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
-                           else
-                             value
-      end
+      result[yield(key)] =
+        if value.is_a?(Hash)
+          value.deep_transform_keys(&block)
+        elsif value.is_a?(Array)
+          value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
+        else
+          value
+        end
     end
     result
   end
@@ -111,13 +100,14 @@ class Hash
   def deep_transform_keys!(&block)
     keys.each do |key|
       value = delete(key)
-      self[yield(key)] = if value.is_a?(Hash)
-                           value.deep_transform_keys(&block)
-                         elsif value.is_a?(Array)
-                           value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
-                         else
-                           value
-      end
+      self[yield(key)] =
+        if value.is_a?(Hash)
+          value.deep_transform_keys(&block)
+        elsif value.is_a?(Array)
+          value.map { |v| v.is_a?(Hash) ? v.deep_transform_keys(&block) : v }
+        else
+          value
+        end
     end
     self
   end
@@ -150,25 +140,13 @@ class Hash
   #   hash.deep_symbolize_keys
   #   # => { person: { name: "Rob", age: "28" } }
   def deep_symbolize_keys
-    deep_transform_keys do |key|
-      begin
-                                 key.to_sym
-                               rescue
-                                 key
-                               end
-    end
+    deep_transform_keys { |key| key.to_sym rescue key }
   end
 
   # Destructively convert all keys to symbols, as long as they respond
   # to +to_sym+. This includes the keys from the root hash and from all
   # nested hashes.
   def deep_symbolize_keys!
-    deep_transform_keys! do |key|
-      begin
-                                  key.to_sym
-                                rescue
-                                  key
-                                end
-    end
+    deep_transform_keys! { |key| key.to_sym rescue key }
   end
 end

@@ -12,6 +12,10 @@ files = [
   "hash_with_indifferent_access",
 
   "core_ext/module/delegation"
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
+].map do |file|
+  File.expand_path(
+    File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")
+  )
+end
 
 Motion::Require.all(files)

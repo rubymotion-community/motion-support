@@ -28,7 +28,9 @@ module MotionSupport
     inflect.singular(/(ss)$/i, '\1')
     inflect.singular(/(n)ews$/i, '\1ews')
     inflect.singular(/([ti])a$/i, '\1um')
-    inflect.singular(/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)(sis|ses)$/i, '\1sis')
+    sis_regex =
+      /((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)(sis|ses)$/i
+    inflect.singular(sis_regex, '\1sis')
     inflect.singular(/(^analy)(sis|ses)$/i, '\1sis')
     inflect.singular(/([^f])ves$/i, '\1fe')
     inflect.singular(/(hive)s$/i, '\1')
@@ -60,7 +62,9 @@ module MotionSupport
     inflect.irregular("cow", "kine")
     inflect.irregular("zombie", "zombies")
 
-    inflect.uncountable(%w(equipment information rice money species series fish sheep jeans police))
+    inflect.uncountable(%w(
+      equipment information rice money species series fish sheep jeans police
+    ))
 
     inflect.acronym("UI")
   end

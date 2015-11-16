@@ -10,6 +10,10 @@ files = [
   "core_ext/object/instance_variables",
   "core_ext/object/to_param",
   "core_ext/object/to_query"
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
+].map do |file|
+  File.expand_path(
+    File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")
+  )
+end
 
 Motion::Require.all(files)

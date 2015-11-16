@@ -8,6 +8,10 @@ files = [
   "core_ext/array/extract_options",
   "core_ext/array/grouping",
   "core_ext/array/prepend_and_append"
-].map { |file| File.expand_path(File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")) }
+].map do |file|
+  File.expand_path(
+    File.join(File.dirname(__FILE__), "/../../../motion", "#{file}.rb")
+  )
+end
 
 Motion::Require.all(files)

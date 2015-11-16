@@ -48,12 +48,14 @@ module MotionSupport
     def camelize(term, uppercase_first_letter = true)
       string = term.to_s
       if uppercase_first_letter
-        string = string.sub(/^[a-z\d]*/) { inflections.acronyms[$&] || $&.capitalize }
+        string = string
+          .sub(/^[a-z\d]*/) { inflections.acronyms[$&] || $&.capitalize }
       else
-        string = string.sub(/^(?:#{inflections.acronym_regex}(?=\b|[A-Z_])|\w)/) { $&.downcase }
+        string = string
+          .sub(/^(?:#{inflections.acronym_regex}(?=\b|[A-Z_])|\w)/) { $&.downcase }
       end
-      string.gsub(/(?:_|(\/))([a-z\d]*)/i) do
-        "#{$1}#{inflections.acronyms[$2] || $2.capitalize}"
+      string.gsub(/(?:_|(\/))([a-z\d]*)/i) do |namespace, klass|
+        "#{namespace}#{inflections.acronyms[klass] || klass.capitalize}"
       end.gsub("/", "::")
     end
 
@@ -71,8 +73,9 @@ module MotionSupport
     def underscore(camel_cased_word)
       word = camel_cased_word.to_s.dup
       word.gsub!("::", "/")
-      word.gsub!(/(?:([A-Za-z\d])|^)(#{inflections.acronym_regex})(?=\b|[^a-z])/) do
-        "#{$1}#{$1 && '_'}#{$2.downcase}"
+      matcher = /(?:([A-Za-z\d])|^)(#{inflections.acronym_regex})(?=\b|[^a-z])/
+      word.gsub!(matcher) do |namespace, klass|
+        "#{namespace}#{namespace && '_'}#{klass.downcase}"
       end
       word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
       word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
@@ -92,9 +95,9 @@ module MotionSupport
       inflections.humans.each { |(rule, replacement)| break if result.sub!(rule, replacement) }
       result.gsub!(/_id$/, "")
       result.tr!("_", " ")
-      result.gsub(/([a-z\d]*)/i) do |match|
-        "#{inflections.acronyms[match] || match.downcase}"
-      end.gsub(/^\w/) { $&.upcase }
+      result
+        .gsub(/([a-z\d]*)/i) { |match| "#{inflections.acronyms[match] || match.downcase}" }
+        .gsub(/^\w/) { $&.upcase }
     end
 
     # Capitalizes all the words and replaces some characters in the string to
@@ -151,7 +154,8 @@ module MotionSupport
     # See also +deconstantize+.
     def demodulize(path)
       path = path.to_s
-      return path[(i + 2)..-1] if i = path.rindex("::")
+      namespace_index = path.rindex("::")
+      return path[(namespace_index + 2)..-1] if namespace_index
       path
     end
 
