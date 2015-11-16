@@ -130,7 +130,12 @@ class Module
         "when delegating to a method."
     end
 
-    method_prefix = prefix ? "#{prefix == true ? to : prefix}_" : ""
+    method_prefix =
+      if prefix
+        "#{prefix == true ? to : prefix}_"
+      else
+        ""
+      end
 
     reference, *hierarchy = to.to_s.split(".")
     entry = resolver =

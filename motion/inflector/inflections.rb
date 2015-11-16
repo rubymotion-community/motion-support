@@ -38,7 +38,9 @@ module MotionSupport
 
       # Private, for the test suite.
       def initialize_dup(orig) # :nodoc:
-        %w(plurals singulars uncountables humans acronyms acronym_regex).each do |scope|
+        %w(
+          plurals singulars uncountables humans acronyms acronym_regex
+        ).each do |scope|
           instance_variable_set("@#{scope}", orig.send(scope).dup)
         end
       end

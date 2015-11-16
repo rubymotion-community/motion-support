@@ -264,16 +264,14 @@ module MotionSupport
           value = nil
           halted = false
 
-          callbacks = lambda do |_obj, value, halted|
-            value = !halted && (block.call if block)
-            [value, halted]
+          callbacks = lambda do |_obj, given_value, given_halted|
+            given_value = !given_halted && (block.call if block)
+            [given_value, given_halted]
           end
 
-          reverse_each do |callback|
-            callbacks = callback.apply(callbacks)
-          end
+          reverse_each { |callback| callbacks = callback.apply(callbacks) }
 
-          value, halted = *(callbacks.call(obj, value, halted))
+          value, _halted = *(callbacks.call(obj, value, halted))
 
           value
         end

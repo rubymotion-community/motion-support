@@ -47,6 +47,7 @@ module MotionSupport
     #   'SSLError'.underscore.camelize # => "SslError"
     def camelize(term, uppercase_first_letter = true)
       string = term.to_s
+
       if uppercase_first_letter
         string = string
           .sub(/^[a-z\d]*/) { inflections.acronyms[$&] || $&.capitalize }
@@ -54,7 +55,10 @@ module MotionSupport
         string = string
           .sub(/^(?:#{inflections.acronym_regex}(?=\b|[A-Z_])|\w)/) { $&.downcase }
       end
-      string.gsub(/(?:_|(\/))([a-z\d]*)/i) do |namespace, klass|
+
+      string.gsub(%r{(?:_|(\/))([a-z\d]*)/}i) do
+        namespace = Regexp.last_match[1]
+        klass = Regexp.last_match[2]
         "#{namespace}#{inflections.acronyms[klass] || klass.capitalize}"
       end.gsub("/", "::")
     end
@@ -74,7 +78,9 @@ module MotionSupport
       word = camel_cased_word.to_s.dup
       word.gsub!("::", "/")
       matcher = /(?:([A-Za-z\d])|^)(#{inflections.acronym_regex})(?=\b|[^a-z])/
-      word.gsub!(matcher) do |namespace, klass|
+      word.gsub!(matcher) do
+        namespace = Regexp.last_match[1]
+        klass = Regexp.last_match[2]
         "#{namespace}#{namespace && '_'}#{klass.downcase}"
       end
       word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
