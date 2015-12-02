@@ -36,9 +36,24 @@ describe ".to_json" do
     end
   end
 
+  describe "Time" do
+    it "should return iso8601" do
+      Time.new(2015, 12, 25, 1, 2, 3, '-05:00').utc.to_json.should == '"2015-12-25T06:02:03Z"'
+    end
+  end
+
+  describe "Date" do
+    it "should return iso8601" do
+      Date.new(2015, 12, 25).to_json.should == '"2015-12-25"'
+    end
+  end
+
   describe "array" do
     it "should convert mixed type array" do
-      [true, false, nil, {:foo => :bar}, 'fizz', ''].to_json.should == '[true,false,null,{"foo":"bar"},"fizz",""]'
+      input = [true, false, nil, {:foo => :bar}, 'fizz', '', Time.new(2015, 12, 25, 1, 2, 3, '-05:00').utc, Date.new(2015, 12, 25)]
+      output = '[true,false,null,{"foo":"bar"},"fizz","","2015-12-25T06:02:03Z","2015-12-25"]'
+
+      input.to_json.should == output
     end
   end
 

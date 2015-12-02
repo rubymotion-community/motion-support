@@ -3,12 +3,12 @@
 class Object
   # Serializes the object to a hash then the hash using Cocoa's NSJSONSerialization
   def to_json
-    attributes = {}
-
-    self.instance_variables.each do |attribute|
-      key = attribute.to_s.gsub('@', '')
-      attributes[key] = self.instance_variable_get(attribute)
-    end
+    attributes =
+      if respond_to?(:to_hash)
+        to_hash.as_json
+      else
+        instance_values.as_json
+      end
 
     attributes.to_json
   end
@@ -73,7 +73,7 @@ end
 class String
   # Returns JSON-escaped +self+.
   def to_json
-    JSONString.escape self
+    JSONString.escape(self)
   end
 end
 
@@ -88,6 +88,26 @@ class Numeric
   # Returns +self+.
   def to_json
     self
+  end
+end
+
+class Date
+  def as_json
+    strftime("%Y-%m-%d")
+  end
+
+  def to_json
+    as_json.to_json
+  end
+end
+
+class Time
+  def as_json
+    xmlschema
+  end
+
+  def to_json
+    as_json.to_json
   end
 end
 
