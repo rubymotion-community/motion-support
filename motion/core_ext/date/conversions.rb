@@ -8,8 +8,14 @@ class Date
       day_format = MotionSupport::Inflector.ordinalize(date.day)
       date.strftime("%B #{day_format}, %Y") # => "April 25th, 2007"
     },
-    :rfc822       => '%e %b %Y'
+    :rfc822       => '%e %b %Y',
+    :iso8601      => '%Y-%m-%d',
+    :xmlschema    => '%Y-%m-%dT00:00:00Z'
   }
+
+  def iso8601
+    strftime DATE_FORMATS[:iso8601]
+  end
 
   # Convert to a formatted string. See DATE_FORMATS for predefined formats.
   #
@@ -34,15 +40,13 @@ class Date
   #   Date::DATE_FORMATS[:month_and_year] = '%B %Y'
   #   Date::DATE_FORMATS[:short_ordinal] = ->(date) { date.strftime("%B #{date.day.ordinalize}") }
   def to_formatted_s(format = :default)
-    if formatter = DATE_FORMATS[format]
-      if formatter.respond_to?(:call)
-        formatter.call(self).to_s
-      else
-        strftime(formatter)
-      end
-    else
-      to_default_s
-    end
+    formatter = DATE_FORMATS[format]
+
+    return to_default_s unless formatter
+
+    return formatter.call(self).to_s if formatter.respond_to?(:call)
+
+    strftime(formatter)
   end
   alias_method :to_default_s, :to_s
   alias_method :to_s, :to_formatted_s
@@ -53,4 +57,8 @@ class Date
   end
   alias_method :default_inspect, :inspect
   alias_method :inspect, :readable_inspect
+
+  def xmlschema
+    strftime DATE_FORMATS[:xmlschema]
+  end
 end
