@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/tkadauke/motion-support"
   s.summary     = "Commonly useful extensions to the standard library for RubyMotion"
   s.description = "Commonly useful extensions to the standard library for RubyMotion. Ported from ActiveSupport."
+  s.licenses    = ["MIT"]
 
   s.files         = `git ls-files`.split($\)
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
