@@ -2,11 +2,11 @@ describe "String" do
   describe "filters" do
     describe "squish" do
       before do
-        @original = %{\u180E\u180E A string surrounded by unicode mongolian vowel separators,
-          with tabs(\t\t), newlines(\n\n), unicode nextlines(\u0085\u0085) and many spaces(  ). \u180E\u180E}
+        @original = %{ A string surrounded by spaces, with tabs(\t\t),
+          newlines(\n\n), unicode nextlines(\u0085\u0085) and many spaces(  ). }
 
-        @expected = "A string surrounded by unicode mongolian vowel separators, " +
-          "with tabs( ), newlines( ), unicode nextlines( ) and many spaces( )."
+        @expected = "A string surrounded by spaces, with tabs( ), newlines( )," \
+          " unicode nextlines( ) and many spaces( )."
       end
       
       it "should squish string" do

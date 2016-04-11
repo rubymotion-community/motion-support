@@ -78,6 +78,6 @@ end
 
 class BigDecimal
   def duplicable?
-    true
+    false
   end
 end
