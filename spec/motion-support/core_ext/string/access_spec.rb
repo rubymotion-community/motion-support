@@ -49,5 +49,10 @@ describe "String" do
       hash["hello123".first(5)] = true
       hash.keys.should == %w(hello)
     end
+
+    it "should handle emojis" do
+      "😊 hello"[0].should == "😊"
+      "😊 hello".last(5).should == "hello"
+    end
   end
 end
