@@ -1,6 +1,7 @@
 require 'motion-require'
 
 files = [
+  'duration',
   'core_ext/numeric/bytes',
   'core_ext/numeric/conversions',
   'core_ext/numeric/time'
