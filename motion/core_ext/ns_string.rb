@@ -1,5 +1,3 @@
-motion_require "module/delegation"
-
 class NSString
   def to_s
     String.new(self)

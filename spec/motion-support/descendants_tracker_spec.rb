@@ -18,7 +18,7 @@ module DescendantsTrackerSpec
   ALL = [Parent, Child1, Child2, Grandchild1, Grandchild2]
 end
 
-describe "DescendatsTracker" do
+describe "DescendantsTracker" do
   describe "descendants" do
     it "should get all descendants from parent class" do
       [DescendantsTrackerSpec::Child1, DescendantsTrackerSpec::Child2, DescendantsTrackerSpec::Grandchild1, DescendantsTrackerSpec::Grandchild2].should == DescendantsTrackerSpec::Parent.descendants

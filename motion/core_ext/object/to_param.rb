@@ -33,26 +33,3 @@ class Array
     collect { |e| e.to_param }.join '/'
   end
 end
-
-class Hash
-  # Returns a string representation of the receiver suitable for use as a URL
-  # query string:
-  #
-  #   {name: 'David', nationality: 'Danish'}.to_param
-  #   # => "name=David&nationality=Danish"
-  #
-  # An optional namespace can be passed to enclose the param names:
-  #
-  #   {name: 'David', nationality: 'Danish'}.to_param('user')
-  #   # => "user[name]=David&user[nationality]=Danish"
-  #
-  # The string pairs "key=value" that conform the query string
-  # are sorted lexicographically in ascending order.
-  #
-  # This method is also aliased as +to_query+.
-  def to_param(namespace = nil)
-    collect do |key, value|
-      value.to_query(namespace ? "#{namespace}[#{key}]" : key)
-    end.sort * '&'
-  end
-end

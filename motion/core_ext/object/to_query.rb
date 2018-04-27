@@ -1,5 +1,3 @@
-motion_require 'to_param'
-
 class Object
   # Converts an object into a string suitable for use as a URL query string, using the given <tt>key</tt> as the
   # param name.
@@ -21,6 +19,3 @@ class Array
   end
 end
 
-class Hash
-  alias_method :to_query, :to_param
-end

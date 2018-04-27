@@ -1,5 +1,3 @@
-motion_require 'concern'
-
 module MotionSupport
   # Callbacks are code hooks that are run at key points in an object's lifecycle.
   # The typical use case is to have a base class define a set of callbacks
