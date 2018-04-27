@@ -182,5 +182,13 @@ describe "Date" do
         Date.yesterday.should.not.be.future
       end
     end
+
+    describe "plus_with_duration" do
+      it "should calculate correctly" do
+        (Date.new(1982,10,4) + 1.day).should == Date.new(1982,10,5)
+        (Date.new(1982,10,4) + 1.month).should == Date.new(1982,11,4)
+        (Date.new(1982,10,4) + 1.year).should == Date.new(1983,10,4)
+      end
+    end
   end
 end
