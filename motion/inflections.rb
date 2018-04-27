@@ -1,5 +1,3 @@
-motion_require 'inflector/inflections'
-
 module MotionSupport
   Inflector.inflections do |inflect|
     inflect.plural(/$/, 's')

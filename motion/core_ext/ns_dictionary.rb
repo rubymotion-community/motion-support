@@ -1,5 +1,3 @@
-motion_require "module/delegation"
-
 class NSDictionary
   def to_hash
     Hash.new.tap do |h|

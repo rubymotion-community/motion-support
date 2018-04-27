@@ -1,5 +1,3 @@
-motion_require "../date_and_time/calculations"
-
 class Date
   include DateAndTime::Calculations
 
@@ -77,8 +75,8 @@ class Date
       plus_without_duration(other)
     end
   end
-  alias_method :+, :plus_with_duration
   alias_method :plus_without_duration, :+
+  alias_method :+, :plus_with_duration
 
   def minus_with_duration(other) #:nodoc:
     if MotionSupport::Duration === other
@@ -87,8 +85,8 @@ class Date
       minus_without_duration(other)
     end
   end
-  alias_method :-, :minus_with_duration
   alias_method :minus_without_duration, :-
+  alias_method :-, :minus_with_duration
 
   # Provides precise Date calculations for years, months, and days. The +options+ parameter takes a hash with
   # any of these keys: <tt>:years</tt>, <tt>:months</tt>, <tt>:weeks</tt>, <tt>:days</tt>.
