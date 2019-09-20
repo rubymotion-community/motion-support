@@ -1,5 +1,8 @@
 language: objective-c
-osx_image: xcode7.1
+osx_image: xcode8
+before_install:
+  - sudo motion update
+  - motion repo
 script: bundle exec rake spec
 deploy:
   provider: rubygems
