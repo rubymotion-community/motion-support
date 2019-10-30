@@ -1,10 +1,9 @@
 #!/usr/bin/env rake
 $:.unshift("/Library/RubyMotion/lib")
 $:.unshift("~/.rubymotion/rubymotion-templates")
-
 require 'motion/project/template/ios'
-require "bundler/gem_tasks"
-require "bundler/setup"
+require 'bundler/setup'
+require 'motion/project/template/gem/gem_tasks'
 Bundler.require
 
 require 'motion-support'
