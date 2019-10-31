@@ -101,4 +101,33 @@ class String
       from(-limit)
     end
   end
+
+  # Emojis pose a problem for array-like access of a string. If you try to
+  # grab one register you'll get am error: "You can't cut a surrogate in two in
+  # an encoding that is not UTF-16 (IndexError)"
+  # Calling split(''), which splits the string into array of characters, works
+  # correctly even with emojis. So to make this method work as expected for
+  # strings, first split it then join.
+
+  # These are the method definitions of String#[]. The first three match the
+  # method definition of an array so only apply the patch if the arguments
+  # look like that.
+  # - str[index] => new_str or nil
+  # - str[start, length] => new_str or nil
+  # - str[range] => new_str or nil
+  # - str[regexp] => new_str or nil
+  # - str[regexp, capture] => new_str or nil
+  # - str[match_str] => new_str or nil
+  alias_method :bracket_access_original, :[]
+
+  def [](*args)
+    unless args[0].is_a?(Numeric) || args[0].is_a?(Range)
+      return bracket_access_original(*args)
+    end
+
+    # Could be nil, string (one character), or array of characters
+    characters = split('')[*args]
+
+    characters.is_a?(Array) ? characters.join : characters
+  end
 end
