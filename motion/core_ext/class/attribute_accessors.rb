@@ -33,7 +33,7 @@ class Class
       raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         unless class_variable_defined?("@@#{sym}")
-          class_variable_set("@@#{sym}", nil)
+          class_variable_set("@@#{sym}", block_given? ? yield : options[:default])
         end
 
         define_singleton_method sym do
@@ -94,7 +94,7 @@ class Class
       raise NameError.new('invalid attribute name') unless sym =~ /^[_A-Za-z]\w*$/
       class_exec do
         unless class_variable_defined?("@@#{sym}")
-          class_variable_set("@@#{sym}", nil)
+          class_variable_set("@@#{sym}", block_given? ? yield : options[:default])
         end
 
         define_singleton_method "#{sym}=" do |obj|
@@ -109,7 +109,6 @@ class Class
           end
         end
       end
-      send("#{sym}=", yield) if block_given?
     end
   end
 
@@ -161,8 +160,17 @@ class Class
   #   end
   #
   #   Person.class_variable_get("@@hair_colors") #=> [:brown, :black, :blonde, :red]
+  #
+  # Or by specifying a default
+  #
+  #   class Person
+  #     cattr_accessor :hair_colors, default: [:brown, :black, :blonde, :red]
+  #   end
+  #
+  #   Person.class_variable_get("@@hair_colors") #=> [:brown, :black, :blonde, :red]
+
   def cattr_accessor(*syms, &blk)
-    cattr_reader(*syms)
+    cattr_reader(*syms, &blk)
     cattr_writer(*syms, &blk)
   end
 end
