@@ -42,7 +42,7 @@ describe "class" do
         @class.rdrd.should == 'default'
       end
 
-      it "should return default if one was given for specified" do
+      it "should return default if one was given for instance" do
         @object.rdrd.should == 'default'
       end
     end
