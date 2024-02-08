@@ -3,7 +3,7 @@ module MotionSupport
   # Time#advance, respectively. It mainly supports the methods on Numeric.
   #
   #   1.month.ago       # equivalent to Time.now.advance(months: -1)
-  class Duration < BasicObject
+  class Duration
     attr_accessor :value, :parts
 
     def initialize(value, parts) #:nodoc:
@@ -79,7 +79,11 @@ module MotionSupport
       to_i
     end
 
-  protected
+    def to_json
+      as_json.to_json
+    end
+
+    protected
 
     def sum(sign, time = ::Time.now) #:nodoc:
       parts.inject(time) do |t,(type,number)|
